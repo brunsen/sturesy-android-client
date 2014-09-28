@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ClickableViewAccessibility" severity="ignore" />
+    <issue id="DefaultLocale">
+        <ignore path="src/android/gui/InternetSettingsFragment.java" />
+        <ignore path="src/sturesy/android/gui/InternetSettingsFragment.java" />
+        <ignore path="src/sturesy/core/backend/filter/file/ZipFileFilter.java" />
+        <ignore path="src/sturesy/items/TextQuestion.java" />
+        <ignore path="src/sturesy/services/QTIImportService.java" />
+    </issue>
+    <issue id="NewApi">
+        <ignore path="src/sturesy/android/gui/VotingActivity.java" />
+    </issue>
+    <issue id="SimpleDateFormat">
+        <ignore path="src/sturesy/util/web/WebVotingHandler.java" />
+    </issue>
+    <issue id="TrulyRandom">
+        <ignore path="src/sturesy/util/Crypt.java" />
+    </issue>
+    <issue id="UseSparseArrays" severity="ignore" />
+</lint>

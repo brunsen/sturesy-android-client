@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">StuReSy</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Activity names -->
+    <string name="title_activity_planning">Frageneditor</string>
+    <string name="title_activity_presentation">Abstimmung</string>
+    <string name="title_activity_result">ResultActivity</string>
+    <string name="title_activity_evaluation">Abstimmungsanalyse</string>
+    <string name="title_activity_html_editor">Bearbeiten</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_settings">Einstellungen</string>
+
+    <!-- Voting -->
+    <string name="answers">Antworten</string>
+    <string name="votes">Stimmen:</string>
+    <string name="time">Zeit:</string>
+    <string name="no_file_name">Es wurde kein Name angegeben. Speichervorgang abgebrochen.</string>
+    <string name="votings">Abstimmungen</string>
+    <string name="QR_Code">QR Code</string>
+    <string name="reset_voting_toast">Die Abstimmung wurde für die aktuelle Frage zurückgesetzt</string>
+    <string name="voting_started_toast">Die Abstimmung wurde gestartet</string>
+    <string name="voting_finished_toast">Die Abstimmung wurde beendet</string>
+
+    <!-- Question Generator -->
+    <string name="name_of_question_set">Name des Fragesatzes</string>
+    <string name="example_title">Mustertitel</string>
+    <string name="questions_folders">Fragesätze</string>
+    <string name="new_lecture">Neue Vorlesung</string>
+    <string name="title_question_selection">Fragetyp wählen</string>
+    <string name="single_choice">Normale Frage</string>
+    <string name="multiple_choice">Mehrfachauswahl Frage</string>
+    <string name="text_choice">Text Frage</string>
+    <string name="add_question">Frage hinzufügen</string>
+    <string name="duration_in_seconds">Dauer in Sekunden (leer=unbegrenzt): </string>
+    <string name="questions">Fragen</string>
+    <string name="deselect_correct_answer">Korrekte Antwort abwählen</string>
+    <string name="new_answer">Neue Antwort</string>
+    <string name="add_answer">Antwort hinzufügen</string>
+    <string name="up">Hoch</string>
+    <string name="down">Runter</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="question_generator_answer">Antwort:</string>
+    <string name="tolerance">Fehlertoleranz:</string>
+    <string name="ignore_case">Groß/KleinSchreibung ignorieren</string>
+    <string name="ignore_white_space">Leerzeichen ignorieren</string>
+    <string name="answer">Antwort</string>
+    <string name="question">Frage</string>
+    <string name="save">Speichern</string>
+    <string name="new_question">Neue Frage</string>
+    <string name="question_save_successful">Das Frageset wurde erfolgreich gespeichert</string>
+    <string name="error_saving_questions">Fehler beim Speichern des Fragesets</string>
+    <string name="error_no_questionset_name">Bitte geben Sie einen Namen für das Fragesatz an!</string>
+    <string name="error_file_already_exist">Der angegebene Name des Fragesets konnte nicht verwendet werden. Die Fragen wurden unter dem bisherigen Namen gespeichert.</string>
+
+    <!-- Voting Analysis -->
+    <string name="error_csv_message">Die abgegebenen Stimmen konnten nicht in eine csv Datei gespeichert werden.</string>
+    <string name="error_reading_votes_from_file">Die Abstimmungsergebnisse konnten nicht geladen werden.
+        Grund hier für sind Fehler in der XML-Datei.</string>
+    <string name="csv_export">C SV Export</string>
+    <string name="open_results">Ergebnisse laden</string>
+    <string name="number_of_votes">Anzahl an Stimmen</string>
+    <string name="votes_over_time">Stimmen pro Zeit</string>
+    <string name="time_in_seconds">Zeit in Sekunden</string>
+    <string name="mean">Mittelwert: %f Sekunden</string>
+    <string name="median">Median: %f Sekunden</string>
+    <string name="others">Andere</string>
+
+    <!-- Dialog and error handling -->
+    <string name="title_open_qti">QTI-Fragesatz laden</string>
+    <string name="title_load_votes">Ergebnisse laden</string>
+    <string name="error">Fehler</string>
+    <string name="dialog_import_title">Auswahl</string>
+    <string name="Abort">Abbrechen</string>
+    <string name="OK">OK</string>
+    <string name="error.no.lecture.id">Keine Vorlesungs-ID</string>
+    <string name="error_load_questionset">Mindestens ein Frageset konnte nicht geladen werden.</string>
+
+    <!-- Settings activity -->
+    <string name="token_redemption_success">Auslesen des Tokens war erfolgreich</string>
+    <string name="error_tokenredemption">Fehler beim Auslesen des Tokens.</string>
+    <string name="error_no_valid_host_provided">Es wurde keine gültige URL angegeben</string>
+    <string name="error_saving_lecture_id">Fehler beim speichern der LectureID.</string>
+    <string name="error_no_lecture_id_provided">Es wurde keine ID angegeben</string>
+    <string name="error_no_password_provided">Es wurde kein Password angegeben</string>
+    <string name="host_connection_success">Verbinden mit dem Server war erfolgreich</string>
+    <string name="error_host_connection_failed">Konnte keine Verindung mit dem Server herstellen</string>
+    <string name="saving_lecture_id_success">Speichern der Lecture ID war erfolgreich.</string>
+    <string name="error_reading_file">Die Datei konnte nicht gelesen werden.</string>
+    <string name="label_websettings">Internet Einstellungen</string>
+    <string name="web_plugin_available">Web Plugin verfügbar</string>
+    <string name="server_address">Serveradresse</string>
+    <string name="check_server_availability">Server auf Erreichbarkeit prüfen</string>
+    <string name="server_check_intervall">Abfragefrequenz</string>
+    <string name="milli_seconds">Millisekunden</string>
+    <string name="lecture_id">Vorlesungs-ID</string>
+    <string name="token_label">Token:</string>
+    <string name="redeem">Einlösen</string>
+    <string name="save_and_close">Speichern und schließen</string>
+
+    <!-- Menu -->
+    <string name="qti_import">QTI importieren</string>
+    <string name="load_question_set">Fragesatz laden</string>
+
+</resources>

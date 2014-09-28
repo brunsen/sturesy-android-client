@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <TextView 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/label_websettings"/>
+    <LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <CheckBox 
+            android:id="@+id/webPluginCheck"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <TextView 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/web_plugin_available"/>
+    </LinearLayout>
+     <LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:text="@string/server_address"/>
+        <EditText 
+            android:id="@+id/server_adress"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:text="http://relay.php"/>
+        <ImageButton 
+            android:id="@+id/check_server"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/red"
+            android:onClick="checkServer"
+            android:contentDescription="@string/check_server_availability"/>
+	</LinearLayout>
+	<LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/server_check_intervall"/>
+
+        <EditText
+            android:id="@+id/server_pull_intervall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.67"
+            android:inputType="number"
+            android:text="5000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/milli_seconds" />
+
+	</LinearLayout>
+	
+	<LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.51"
+            android:text="@string/lecture_id" />
+
+        <EditText
+            android:id="@+id/edit_lecture_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.09"
+            android:inputType="text"
+            android:text="" />
+
+	</LinearLayout>
+	
+	<LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="Passwort"/>
+
+        <EditText
+            android:id="@+id/edit_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.17"
+            android:inputType="textPassword" />
+
+	</LinearLayout>
+	
+	<LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/token_label"/>
+        <EditText 
+            android:id="@+id/edit_token"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:inputType="text"
+            android:layout_weight="5"/>
+        <Button 
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/redeem"
+            android:onClick="redeemToken"/>
+	</LinearLayout>
+	
+	<LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="200dp"
+        android:orientation="horizontal">
+        <Button 
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/save"
+            android:onClick="saveSettings"/>
+        <Button 
+            android:id="@+id/save_and_exit"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/save_and_close"
+            android:onClick="saveSettings"/>
+	</LinearLayout>
+	
+</LinearLayout>

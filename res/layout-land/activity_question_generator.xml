@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.12" >
+
+        <TextView
+            android:id="@+id/catalogueTitleHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name_of_question_set" />
+
+        <EditText
+            android:id="@+id/catalogueTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/catalogueTitleHeader"
+            android:hint="@string/example_title" />
+
+        <TextView
+            android:id="@+id/questionHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/catalogueTitle"
+            android:text="@string/questions"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ListView
+            android:id="@+id/questionList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/questionListAdd"
+            android:layout_below="@id/questionHeader" />
+
+        <Button
+            android:id="@+id/questionListAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:onClick="addItem"
+            android:text="@string/add_question" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="5dp"
+        android:layout_weight="0.76" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/duration_in_seconds" />
+
+        <EditText
+            android:id="@+id/timePicker"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/textView1"
+            android:layout_toRightOf="@+id/textView1"
+            android:ems="10"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/saveQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/timePicker"
+            android:layout_toRightOf="@+id/timePicker"
+            android:onClick="save"
+            android:text="@string/save" />
+
+        <FrameLayout
+            android:id="@+id/_question_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_alignStart="@+id/textView1"
+            android:layout_below="@+id/textView1" />
+    </RelativeLayout>
+
+</LinearLayout>

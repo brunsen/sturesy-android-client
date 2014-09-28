@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.uhh.sturesy_android"
+    android:versionCode="1"
+    android:versionName="1.0"
+    android:hardwareAccelerated = "false" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="20" />
+    
+
+    <supports-screens
+        android:largeScreens="true"
+        android:normalScreens="false"
+        android:smallScreens="false"
+        android:xlargeScreens="true"
+        android:requiresSmallestWidthDp="600" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/voting"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo.Light" >
+        <activity
+            android:name="sturesy.android.controllers.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="sturesy.android.controllers.qgen.QuestionGeneratorActivity"
+            android:label="@string/title_activity_planning"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="sturesy.android.controllers.voting.VotingActivity"
+            android:label="@string/title_activity_presentation"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="sturesy.android.controllers.votinganalysis.VotingAnalysisActivity"
+            android:label="@string/title_activity_evaluation"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="sturesy.android.controllers.HtmlEditorActivity"
+            android:label="@string/title_activity_html_editor"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="sturesy.android.controllers.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="landscape" >
+        </activity>
+    </application>
+
+</manifest>
