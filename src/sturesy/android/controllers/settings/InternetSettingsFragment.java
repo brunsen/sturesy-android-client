@@ -123,10 +123,10 @@ public class InternetSettingsFragment extends Fragment {
 	public void redeemToken(View v) {
 		_settings.setProperty(Settings.SERVERADDRESS, _hostTextview.getText()
 				.toString());
-		if (_tokenfield.getText().length() != 0) {
+		if (_tokenfield.getText().toString().length() != 0) {
 			try {
-				String result = WebCommands.redeemToken(Settings.SERVERADDRESS,
-						_tokenfield.getText().toString());
+				String result = WebCommands.redeemToken(_settings.getString(Settings.SERVERADDRESS),
+						_tokenfield.getText().toString().trim());
 				String name = result.split(";")[0];
 				String pw = result.split(";")[1];
 

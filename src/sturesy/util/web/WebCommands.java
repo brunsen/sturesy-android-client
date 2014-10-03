@@ -322,7 +322,6 @@ public class WebCommands
             } };
 
             SSLContext sc = SSLContext.getInstance("SSL");
-            //TODO:find secure solutions for next line
             sc.init(null, trustAllCerts, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 

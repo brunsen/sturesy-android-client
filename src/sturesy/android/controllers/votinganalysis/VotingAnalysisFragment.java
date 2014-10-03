@@ -20,6 +20,7 @@ package sturesy.android.controllers.votinganalysis;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.achartengine.ChartFactory;
@@ -50,7 +51,6 @@ import de.uhh.sturesy_android.R;
  *
  */
 public class VotingAnalysisFragment extends Fragment {
-	// TODO Write Clear method, which just shows zero data and clears graphs.
 	private TextView _questionPanel;
 	private QuestionModel _questionModel;
 	private Set<Vote> _votesToDisplay;
@@ -331,6 +331,13 @@ public class VotingAnalysisFragment extends Fragment {
 	public void updateQuestion(QuestionModel qm, Set<Vote> votes) {
 		_questionModel = qm;
 		_votesToDisplay = votes;
+		_graphArea.removeAllViews();
+		setData();
+	}
+	
+	public void updateQuestion(QuestionModel qm) {
+		_questionModel = qm;
+		_votesToDisplay = new HashSet<Vote>();
 		_graphArea.removeAllViews();
 		setData();
 	}

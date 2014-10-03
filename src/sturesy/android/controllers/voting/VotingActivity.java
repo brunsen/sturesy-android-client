@@ -423,12 +423,12 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	}
 
 	/**
-	 * Displays an undecorated dialogue containing a QRCode-Image with the 400 *
-	 * 400 px on the screen
+	 * Displays an undecorated dialogue containing a QRCode-Image with the 500 *
+	 * 500 px on the screen
 	 */
 	public void showQRCode(View v) {
 
-		int size = 400;
+		int size = 500;
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
 				v.getContext());
 		alertBuilder.setTitle(getString(R.string.QR_Code));

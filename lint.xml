@@ -14,7 +14,7 @@
     <issue id="SimpleDateFormat">
         <ignore path="src/sturesy/util/web/WebVotingHandler.java" />
     </issue>
-    <issue id="TrulyRandom">
+    <issue id="TrulyRandom" severity="ignore">
         <ignore path="src/sturesy/util/Crypt.java" />
     </issue>
     <issue id="UseSparseArrays" severity="ignore" />

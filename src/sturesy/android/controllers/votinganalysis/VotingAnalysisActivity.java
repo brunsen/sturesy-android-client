@@ -19,6 +19,7 @@ package sturesy.android.controllers.votinganalysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,7 +34,6 @@ import sturesy.items.QuestionSet;
 import sturesy.items.Vote;
 import sturesy.services.deserialization.QuestionImportService;
 import sturesy.services.deserialization.VoteImportservice;
-import sturesy.util.HTMLLabel;
 import sturesy.util.ValidVotePredicate;
 import sturesy.util.VoteFilter;
 import android.app.Activity;
@@ -47,6 +47,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.uhh.sturesy_android.R;
 /**
  * 
@@ -202,19 +203,13 @@ public class VotingAnalysisActivity extends Activity {
 				+ _questionSet.size());
 		QuestionModel questionModel = _questionSet.getIndex(_currentQuestion);
 		Set<Vote> votesToDisplay = _votes.get(_currentQuestion);
-		String question = questionModel.getQuestion();
+		FragmentManager manager = getFragmentManager();
+		boolean fragmentNotSet = manager.findFragmentByTag("QuestionFragment") == null;
 		if (votesToDisplay != null)
 		{
-			
-			FragmentManager manager = getFragmentManager();
-			
-			if (manager.findFragmentByTag("QuestionFragment") == null)
+			if (fragmentNotSet)
 			{
-				FragmentTransaction transaction = manager.beginTransaction();
-				_currentFragment = new VotingAnalysisFragment(questionModel, votesToDisplay);
-				transaction.add(R.id.voting_analysis_fragment,
-						_currentFragment, "QuestionFragment");
-				transaction.commit();
+				initFragment(questionModel, votesToDisplay, manager);
 			} else
 			{
 				((VotingAnalysisFragment)_currentFragment).updateQuestion(questionModel, votesToDisplay);
@@ -222,11 +217,32 @@ public class VotingAnalysisActivity extends Activity {
 			
 		} else
 		{
-			// TODO: Prompt toast with hint "no data"
-			// TODO: Show empty Fragment exists
-			question = HTMLLabel.generateHTLMString(question);
+			votesToDisplay = new HashSet<Vote>();
+			Toast.makeText(this, getString(R.string.no_votes_for_question), Toast.LENGTH_SHORT).show();
+			if (fragmentNotSet)
+			{
+				initFragment(questionModel, votesToDisplay, manager);
+			} else
+			{
+				((VotingAnalysisFragment)_currentFragment).updateQuestion(questionModel);
+			}
 		}
 
+	}
+
+	/**
+	 * Initializes data fragment and handles fragment transaction.
+	 * @param questionModel
+	 * @param votesToDisplay
+	 * @param manager
+	 */
+	private void initFragment(QuestionModel questionModel,
+			Set<Vote> votesToDisplay, FragmentManager manager) {
+		FragmentTransaction transaction = manager.beginTransaction();
+		_currentFragment = new VotingAnalysisFragment(questionModel, votesToDisplay);
+		transaction.add(R.id.voting_analysis_fragment,
+				_currentFragment, "QuestionFragment");
+		transaction.commit();
 	}
 
 	/**

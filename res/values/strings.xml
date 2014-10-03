@@ -25,19 +25,19 @@
     <string name="voting_finished_toast">Die Abstimmung wurde beendet</string>
 
     <!-- Question Generator -->
-    <string name="name_of_question_set">Name des Fragesatzes</string>
+    <string name="name_of_question_set">Name des Fragensatzes</string>
     <string name="example_title">Mustertitel</string>
     <string name="questions_folders">Fragesätze</string>
     <string name="new_lecture">Neue Vorlesung</string>
     <string name="title_question_selection">Fragetyp wählen</string>
-    <string name="single_choice">Normale Frage</string>
-    <string name="multiple_choice">Mehrfachauswahl Frage</string>
+    <string name="single_choice">Einfachauswahl(Single Choice)</string>
+    <string name="multiple_choice">Mehrfachauswahl(Multiple Choice)</string>
     <string name="text_choice">Text Frage</string>
     <string name="add_question">Frage hinzufügen</string>
     <string name="duration_in_seconds">Dauer in Sekunden (leer=unbegrenzt): </string>
     <string name="questions">Fragen</string>
     <string name="deselect_correct_answer">Korrekte Antwort abwählen</string>
-    <string name="new_answer">Neue Antwort</string>
+    <string name="new_answer"></string>
     <string name="add_answer">Antwort hinzufügen</string>
     <string name="up">Hoch</string>
     <string name="down">Runter</string>
@@ -52,7 +52,7 @@
     <string name="new_question">Neue Frage</string>
     <string name="question_save_successful">Das Frageset wurde erfolgreich gespeichert</string>
     <string name="error_saving_questions">Fehler beim Speichern des Fragesets</string>
-    <string name="error_no_questionset_name">Bitte geben Sie einen Namen für das Fragesatz an!</string>
+    <string name="error_no_questionset_name">Bitte geben Sie einen Namen für den Fragensatz an!</string>
     <string name="error_file_already_exist">Der angegebene Name des Fragesets konnte nicht verwendet werden. Die Fragen wurden unter dem bisherigen Namen gespeichert.</string>
 
     <!-- Voting Analysis -->
@@ -67,6 +67,7 @@
     <string name="mean">Mittelwert: %f Sekunden</string>
     <string name="median">Median: %f Sekunden</string>
     <string name="others">Andere</string>
+    <string name="no_votes_for_question">Keine Abstimmungsdaten für diese Frage vorhanden</string>
 
     <!-- Dialog and error handling -->
     <string name="title_open_qti">QTI-Fragesatz laden</string>
@@ -99,6 +100,7 @@
     <string name="token_label">Token:</string>
     <string name="redeem">Einlösen</string>
     <string name="save_and_close">Speichern und schließen</string>
+    <string name="token_header">Vorlesungsid und Passwort via Token eintragen</string>
 
     <!-- Menu -->
     <string name="qti_import">QTI importieren</string>
