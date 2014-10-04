@@ -72,9 +72,9 @@ public class QuestionGeneratorActivity extends Activity {
 	private File _currentFile;
 	private String _lecturesDirectory;
 	private EditText _fileNameEdit;
-	private EditText _timepicker;
 	private ListView _questionListView;
 	private Fragment _currentFragment;
+	// required for adding questions with dialog
 	private int _questionChoice;
 	private File _qtiFile;
 
@@ -98,19 +98,7 @@ public class QuestionGeneratorActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				if (_currentQuestion != -1 && _currentQuestion != arg2)
-				{
-					QuestionModel qm = _currentQuestionset
-							.getIndex(_currentQuestion);
-					String timeText = _timepicker.getText().toString();
-					if (timeText.equals(""))
-					{
-						qm.setDuration(-1);
-					} else
-					{
-						qm.setDuration(Integer.parseInt(timeText));
-					}
-				}
+
 				_currentQuestion = arg2;
 
 				QuestionModel index = _currentQuestionset.getIndex(arg2);
@@ -125,7 +113,6 @@ public class QuestionGeneratorActivity extends Activity {
 
 	private void initComponents() {
 		_fileNameEdit = (EditText) findViewById(R.id.catalogueTitle);
-		_timepicker = (EditText) findViewById(R.id.timePicker);
 		_questionListView = (ListView) findViewById(R.id.questionList);
 	}
 
@@ -141,6 +128,9 @@ public class QuestionGeneratorActivity extends Activity {
 		case R.id.action_settings:
 			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivity(intent);
+		case R.id.save_question_set:
+			save();
+			return true;
 		case R.id.load_question_set:
 			loadQuestion();
 			return true;
@@ -351,11 +341,6 @@ public class QuestionGeneratorActivity extends Activity {
 	 * Inserts the details of a question into the gui.
 	 */
 	public void setQuestion(QuestionModel qm) {
-		clearQuestion();
-		if (qm.getDuration() != -1)
-		{
-			_timepicker.setText("" + qm.getDuration());
-		}
 		if (qm.getAnswers().isEmpty() && !(qm instanceof TextQuestion))
 		{
 			qm.getAnswers().add("Antwort A");
@@ -396,27 +381,15 @@ public class QuestionGeneratorActivity extends Activity {
 		transaction.commit();
 	}
 
-	public void clearQuestion() {
-		_timepicker.setText("");
-	}
-
-	public void save(View v) {
+	public void save() {
 
 		if (_currentFile != null
 				&& !_fileNameEdit.getText().toString().equals(""))
 		{
-			String newFileName = _fileNameEdit.getText()
-					.toString();
+			String newFileName = _fileNameEdit.getText().toString();
 			QuestionModel currentQuestionModel = _currentQuestionset
 					.getIndex(_currentQuestion);
-			String timeText = _timepicker.getText().toString();
-			if (timeText.equals(""))
-			{
-				currentQuestionModel.setDuration(-1);
-			} else
-			{
-				currentQuestionModel.setDuration(Integer.parseInt(timeText));
-			}
+
 			if (_currentQuestionset == null)
 			{
 				_currentQuestionset = new QuestionSet();
@@ -442,7 +415,8 @@ public class QuestionGeneratorActivity extends Activity {
 			{
 				_fileNameEdit.setText(_currentFileName);
 				String message = getString(R.string.error_file_already_exist);
-				ErrorDialog alert = new ErrorDialog(this, getString(R.string.error), message);
+				ErrorDialog alert = new ErrorDialog(this,
+						getString(R.string.error), message);
 				alert.show();
 			}
 		} else
@@ -456,20 +430,22 @@ public class QuestionGeneratorActivity extends Activity {
 
 	/**
 	 * Method to rename the file.
-	 * @param oldFileName 
+	 * 
+	 * @param oldFileName
 	 * 
 	 * @param Current
 	 *            file to be renamed
 	 * @param New
 	 *            name
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public void renameFile(File from, String name, String oldFileName) throws Exception {
+	public void renameFile(File from, String name, String oldFileName)
+			throws Exception {
 		name = name.replace("/", "");
 		name = name.replace(".xml", "");
 		name = name.replace(".csv", "");
 		name = name.replace(".zip", "");
-		
+
 		if (!from.exists())
 		{
 			try
@@ -480,31 +456,32 @@ public class QuestionGeneratorActivity extends Activity {
 				Log.error(e.getMessage());
 			}
 		}
-		if(!name.equals(oldFileName))
+		if (!name.equals(oldFileName))
 		{
 			File to = new File(_lecturesDirectory, "/" + name + ".xml");
-			if(to.exists())
+			if (to.exists())
 			{
 				throw new Exception();
-			}
-			else{
+			} else
+			{
 				to.createNewFile();
 				InputStream in = new FileInputStream(from);
-                OutputStream out = new FileOutputStream(to);
-     
-                // Copy the bits from instream to outstream
-                byte[] buf = new byte[1024];
-                int len;
-                 
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-                 
-                in.close();
-                out.close();
+				OutputStream out = new FileOutputStream(to);
+
+				// Copy the bits from instream to outstream
+				byte[] buf = new byte[1024];
+				int len;
+
+				while ((len = in.read(buf)) > 0)
+				{
+					out.write(buf, 0, len);
+				}
+
+				in.close();
+				out.close();
 				from.delete();
 			}
-			
+
 		}
 	}
 

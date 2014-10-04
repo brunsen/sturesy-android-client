@@ -28,10 +28,11 @@
     <string name="name_of_question_set">Name des Fragensatzes</string>
     <string name="example_title">Mustertitel</string>
     <string name="questions_folders">Fragesätze</string>
+    <string name="question_hint">Musterfrage</string>
     <string name="new_lecture">Neue Vorlesung</string>
     <string name="title_question_selection">Fragetyp wählen</string>
-    <string name="single_choice">Einfachauswahl(Single Choice)</string>
-    <string name="multiple_choice">Mehrfachauswahl(Multiple Choice)</string>
+    <string name="single_choice">Einfachauswahl (Single Choice)</string>
+    <string name="multiple_choice">Mehrfachauswahl (Multiple Choice)</string>
     <string name="text_choice">Text Frage</string>
     <string name="add_question">Frage hinzufügen</string>
     <string name="duration_in_seconds">Dauer in Sekunden (leer=unbegrenzt): </string>
@@ -47,9 +48,10 @@
     <string name="ignore_case">Groß/KleinSchreibung ignorieren</string>
     <string name="ignore_white_space">Leerzeichen ignorieren</string>
     <string name="answer">Antwort</string>
-    <string name="question">Frage</string>
+    <string name="question">Frage:</string>
     <string name="save">Speichern</string>
     <string name="new_question">Neue Frage</string>
+    <string name="enter_answer">Antwort eingeben</string>
     <string name="question_save_successful">Das Frageset wurde erfolgreich gespeichert</string>
     <string name="error_saving_questions">Fehler beim Speichern des Fragesets</string>
     <string name="error_no_questionset_name">Bitte geben Sie einen Namen für den Fragensatz an!</string>
@@ -80,6 +82,7 @@
     <string name="error_load_questionset">Mindestens ein Frageset konnte nicht geladen werden.</string>
 
     <!-- Settings activity -->
+    <string name="password">Passwort:</string>
     <string name="token_redemption_success">Auslesen des Tokens war erfolgreich</string>
     <string name="error_tokenredemption">Fehler beim Auslesen des Tokens.</string>
     <string name="error_no_valid_host_provided">Es wurde keine gültige URL angegeben</string>
@@ -91,7 +94,6 @@
     <string name="saving_lecture_id_success">Speichern der Lecture ID war erfolgreich.</string>
     <string name="error_reading_file">Die Datei konnte nicht gelesen werden.</string>
     <string name="label_websettings">Internet Einstellungen</string>
-    <string name="web_plugin_available">Web Plugin verfügbar</string>
     <string name="server_address">Serveradresse</string>
     <string name="check_server_availability">Server auf Erreichbarkeit prüfen</string>
     <string name="server_check_intervall">Abfragefrequenz</string>
@@ -100,7 +102,10 @@
     <string name="token_label">Token:</string>
     <string name="redeem">Einlösen</string>
     <string name="save_and_close">Speichern und schließen</string>
-    <string name="token_header">Vorlesungsid und Passwort via Token eintragen</string>
+    <string name="token_header">Vorlesungs-ID und Passwort via Token eintragen</string>
+    <string name="default_address">http://relay.php</string>
+    <string name="host_hint">http://www.example.com/relay.php</string>
+    <string name="default_intervall">5000</string>
 
     <!-- Menu -->
     <string name="qti_import">QTI importieren</string>

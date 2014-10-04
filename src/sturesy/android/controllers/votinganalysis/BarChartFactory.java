@@ -65,8 +65,6 @@ public class BarChartFactory {
 			for (int i = 0; i < votesarr.length; i++)
 			{
 				String text = "" + (char) ('A' + i);
-				XYSeries series = new XYSeries(text);
-				series.add(i, votesarr[i]);
 				XYSeriesRenderer renderer = new XYSeriesRenderer();
 				if(showCorrect)
 				{
@@ -76,12 +74,7 @@ public class BarChartFactory {
 				else{
 					renderer.setColor(Color.parseColor("#FFCC11"));
 				}
-				renderer.setDisplayChartValues(true);
-				renderer.setChartValuesTextAlign(Paint.Align.CENTER);
-				renderer.setChartValuesTextSize(30);
-				multiRenderer.addSeriesRenderer(renderer);
-				multiRenderer.addXTextLabel(i, text);
-				dataSet.addSeries(series);
+				addSeries(votesarr, dataSet, multiRenderer, i, text, renderer);
 			}
 		} else
 		{
@@ -110,20 +103,13 @@ public class BarChartFactory {
 				{
 					renderer.setColor(Color.parseColor("#FFCC11"));
 				}
-				XYSeries series = new XYSeries(text);
-				series.add(i, votesarr[i]);
-				renderer.setDisplayChartValues(true);
-				renderer.setChartValuesTextAlign(Paint.Align.CENTER);
-				renderer.setChartValuesTextSize(30);
-				dataSet.addSeries(series);
-				multiRenderer.addSeriesRenderer(renderer);
-				multiRenderer.addXTextLabel(i, text);
+				addSeries(votesarr, dataSet, multiRenderer, i, text, renderer);
 			}
 		}
 		multiRenderer.setXLabelsAlign(Align.CENTER);
 		multiRenderer.setShowCustomTextGrid(true);
 		multiRenderer.setBarWidth(75);
-		multiRenderer.setBarSpacing(3);
+		multiRenderer.setBarSpacing(0);
 		multiRenderer.setYAxisMin(0);
 		multiRenderer.setXAxisMin(-1);
 		multiRenderer.setLabelsTextSize(18);
@@ -137,6 +123,20 @@ public class BarChartFactory {
 				dataSet, multiRenderer, Type.DEFAULT);
 		barChartView.setMinimumHeight(550);
 		return barChartView;
+	}
+
+	private void addSeries(float[] votesarr, XYMultipleSeriesDataset dataSet,
+			XYMultipleSeriesRenderer multiRenderer, int i, String text,
+			XYSeriesRenderer renderer) {
+		XYSeries series = new XYSeries(text);
+		series.add(i, votesarr[i]);
+		renderer.setDisplayChartValues(true);
+		renderer.setChartValuesTextAlign(Paint.Align.CENTER);
+		renderer.setChartValuesSpacing(3);
+		renderer.setChartValuesTextSize(30);
+		dataSet.addSeries(series);
+		multiRenderer.addSeriesRenderer(renderer);
+		multiRenderer.addXTextLabel(i, text);
 	}
 
 	private void tryColorMultipleChoice(QuestionModel qm, int i,

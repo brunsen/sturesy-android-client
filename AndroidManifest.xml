@@ -52,11 +52,6 @@
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="sturesy.android.controllers.HtmlEditorActivity"
-            android:label="@string/title_activity_html_editor"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
             android:name="sturesy.android.controllers.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="landscape" >

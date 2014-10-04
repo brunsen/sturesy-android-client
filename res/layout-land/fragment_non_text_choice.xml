@@ -3,36 +3,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <Button
-            android:id="@+id/questionButton"
+
+    <TextView
+        android:id="@+id/time_picker_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/duration_in_seconds" />
+
+    <EditText
+        android:id="@+id/timePicker"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/time_picker_label"
+        android:layout_toRightOf="@+id/time_picker_label"
+        android:ems="10"
+        android:inputType="number" />
+
+    <LinearLayout
+        android:id="@+id/question_area"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/time_picker_label"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/question_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/question"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/questionEditText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/question_hint"
+            android:inputType="textMultiLine"
             android:text="" />
+    </LinearLayout>
 
-        <ListView
-            android:id="@+id/editorAnswers"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_above="@+id/addAnswer"
-            android:layout_below="@id/questionButton">
-        </ListView>
+    <ListView
+        android:id="@+id/editorAnswers"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/addAnswer"
+        android:layout_below="@id/question_area" >
+    </ListView>
 
-        <Button
-            android:id="@+id/deselect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/addAnswer"
-            android:layout_toEndOf="@+id/addAnswer"
-            android:layout_alignParentBottom="true"
-            android:text="@string/deselect_correct_answer" />
+    <Button
+        android:id="@+id/deselect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/addAnswer"
+        android:layout_toRightOf="@+id/addAnswer"
+        android:text="@string/deselect_correct_answer" />
 
-        <Button
-            android:id="@+id/addAnswer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:onClick="addItem"
-            android:text="@string/add_answer" />
+    <Button
+        android:id="@+id/addAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="addItem"
+        android:text="@string/add_answer" />
 
 </RelativeLayout>

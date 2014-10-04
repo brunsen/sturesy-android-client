@@ -40,13 +40,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.uhh.sturesy_android.R;
+
 /**
  * 
  * @author b.brunsen
@@ -60,7 +60,6 @@ public class InternetSettingsFragment extends Fragment {
 	private EditText _passwordTextview;
 	private EditText _hostTextview;
 	private EditText _pollFrequency;
-	private CheckBox _webEnabled;
 	private TextView _tokenfield;
 	private ImageButton _hostCheckButton;
 
@@ -76,29 +75,27 @@ public class InternetSettingsFragment extends Fragment {
 				R.layout.internet_settings_fragment, container, false);
 		_settings = SturesyManager.getSettings();
 		Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs();
-		if(lectureIDs == null)
+		if (lectureIDs == null)
 		{
 			lectureIDs = new ArrayList<LectureID>();
 		}
 		_activity = getActivity();
 		initComponents(view);
-		if (!lectureIDs.isEmpty()) {
+		if (!lectureIDs.isEmpty())
+		{
 			int frequency = _settings.getInteger(Settings.POLL_FREQUENCY);
 
-			if (frequency == -1) {
+			if (frequency == -1)
+			{
 				frequency = 5000;
 				_settings.setProperty(Settings.POLL_FREQUENCY, frequency);
 			}
-
 
 			LectureID id = lectureIDs.iterator().next();
 			_idTextView.setText(id.getLectureID());
 			_passwordTextview.setText(id.getPassword());
 			_hostTextview.setText(_settings.getString(Settings.SERVERADDRESS));
 			_pollFrequency.setText("" + frequency);
-			_webEnabled.setChecked(_settings
-					.getBoolean(Settings.WEB_PLUGIN_ENABLED));
-
 		}
 		return view;
 	}
@@ -109,7 +106,6 @@ public class InternetSettingsFragment extends Fragment {
 		_hostTextview = (EditText) view.findViewById(R.id.server_adress);
 		_pollFrequency = (EditText) view
 				.findViewById(R.id.server_pull_intervall);
-		_webEnabled = (CheckBox) view.findViewById(R.id.webPluginCheck);
 		_tokenfield = (TextView) view.findViewById(R.id.edit_token);
 		_hostCheckButton = (ImageButton) view.findViewById(R.id.check_server);
 	}
@@ -123,27 +119,29 @@ public class InternetSettingsFragment extends Fragment {
 	public void redeemToken(View v) {
 		_settings.setProperty(Settings.SERVERADDRESS, _hostTextview.getText()
 				.toString());
-		if (_tokenfield.getText().toString().length() != 0) {
-			try {
-				String result = WebCommands.redeemToken(_settings.getString(Settings.SERVERADDRESS),
+		if (_tokenfield.getText().toString().length() != 0)
+		{
+			try
+			{
+				String result = WebCommands.redeemToken(
+						_settings.getString(Settings.SERVERADDRESS),
 						_tokenfield.getText().toString().trim());
 				String name = result.split(";")[0];
 				String pw = result.split(";")[1];
 
-				if (name.length() < 30) {
-					Collection<LectureID> lectureIDs = SturesyManager
-							.getLectureIDs();
-					lectureIDs.clear();
-					lectureIDs.add(new LectureID(name, pw, _settings
-							.getString(Settings.SERVERADDRESS)));
+				if (name.length() < 30)
+				{
 					_idTextView.setText(name);
 					_passwordTextview.setText(pw);
-					Toast.makeText(_activity, getString(R.string.token_redemption_success),
+					Toast.makeText(_activity,
+							getString(R.string.token_redemption_success),
 							Toast.LENGTH_LONG).show();
-				} else {
+				} else
+				{
 					throw new Exception();
 				}
-			} catch (Exception ex) {
+			} catch (Exception ex)
+			{
 				Dialog alert = new ErrorDialog(_activity,
 						getString(R.string.error),
 						getString(R.string.error_tokenredemption));
@@ -158,7 +156,8 @@ public class InternetSettingsFragment extends Fragment {
 	 * @param v
 	 */
 	public void saveSettings(View v) {
-		if (_pollFrequency.getText().toString().equals("")) {
+		if (_pollFrequency.getText().toString().equals(""))
+		{
 			_pollFrequency.setText("-1");
 		}
 
@@ -171,11 +170,11 @@ public class InternetSettingsFragment extends Fragment {
 				.toString());
 		_settings.setProperty(Settings.POLL_FREQUENCY, _pollFrequency.getText()
 				.toString());
-		_settings.setProperty(Settings.WEB_PLUGIN_ENABLED,
-				_webEnabled.isChecked());
+		_settings.setProperty(Settings.WEB_PLUGIN_ENABLED, true);
 		_settings.save();
 		saveLectureID();
-		if (v.getId() == R.id.save_and_exit) {
+		if (v.getId() == R.id.save_and_exit)
+		{
 			_activity.finish();
 		}
 	}
@@ -187,13 +186,16 @@ public class InternetSettingsFragment extends Fragment {
 	private void saveLectureID() {
 		String id = _idTextView.getText().toString();
 		String password = _passwordTextview.getText().toString();
-		if (id.length() != 0 && password.length() != 0) {
+		if (id.length() != 0 && password.length() != 0)
+		{
 
 			String host = _settings.getString(Settings.SERVERADDRESS);
-			if (host == null || !host.matches("http://.*")) {
+			if (host == null || !host.matches("http://.*"))
+			{
 				String errorTitle = getString(R.string.error);
 				String errorMessage = getString(R.string.error_no_valid_host_provided);
-				ErrorDialog alert = new ErrorDialog(_activity, errorTitle, errorMessage);
+				ErrorDialog alert = new ErrorDialog(_activity, errorTitle,
+						errorMessage);
 				alert.show();
 				return;
 			}
@@ -203,25 +205,36 @@ public class InternetSettingsFragment extends Fragment {
 			lectureIDs.add(new LectureID(id, password, host));
 			String fileName = SturesyManager.getMainDirectory() + "/lid.xml";
 			LectureIDPersister persister = new LectureIDPersister();
-			try {
-				persister.saveToFile(fileName, (ArrayList<LectureID>) lectureIDs);
-			} catch (IOException e) {
+			try
+			{
+				persister.saveToFile(fileName,
+						(ArrayList<LectureID>) lectureIDs);
+			} catch (IOException e)
+			{
 				e.printStackTrace();
-				ErrorDialog alert = new ErrorDialog(_activity,getString(R.string.error), getString(R.string.error_saving_lecture_id));
+				ErrorDialog alert = new ErrorDialog(_activity,
+						getString(R.string.error),
+						getString(R.string.error_saving_lecture_id));
 				alert.show();
 			}
 			Toast.makeText(_activity.getApplicationContext(),
-					getString(R.string.saving_lecture_id_success), Toast.LENGTH_SHORT).show();
+					getString(R.string.saving_lecture_id_success),
+					Toast.LENGTH_SHORT).show();
 
-		} else { // Password or ID empty
+		} else
+		{ // Password or ID empty
 			String errorTitle = getString(R.string.error);
-			if (id.length() == 0) {
+			if (id.length() == 0)
+			{
 				String errorMessage = getString(R.string.error_no_lecture_id_provided);
-				ErrorDialog alert = new ErrorDialog(_activity, errorTitle, errorMessage);
+				ErrorDialog alert = new ErrorDialog(_activity, errorTitle,
+						errorMessage);
 				alert.show();
-			} else {
+			} else
+			{
 				String errorMessage = getString(R.string.error_no_password_provided);
-				ErrorDialog alert = new ErrorDialog(_activity, errorTitle, errorMessage);
+				ErrorDialog alert = new ErrorDialog(_activity, errorTitle,
+						errorMessage);
 				alert.show();
 			}
 		}
@@ -239,16 +252,19 @@ public class InternetSettingsFragment extends Fragment {
 
 			public void inBackground() {
 
-				try {
+				try
+				{
 					URL url = getServerAdress();
 
 					String result = WebCommands.getInfo(url.toString());
 					validresult = result.startsWith("sturesy")
 							&& result.length() < 80
 							&& result.matches("sturesy [0-9\\.]*");
-				} catch (IOException e) {
+				} catch (IOException e)
+				{
 					Log.error(e);
-				} catch (Exception e) {
+				} catch (Exception e)
+				{
 					validresult = false;
 				}
 
@@ -256,14 +272,16 @@ public class InternetSettingsFragment extends Fragment {
 
 			@Override
 			public void postExecute() {
-				if (validresult) {
+				if (validresult)
+				{
 					Toast.makeText(_activity.getApplicationContext(),
 							getString(R.string.host_connection_success),
 							Toast.LENGTH_SHORT).show();
 					_hostCheckButton.setImageResource(R.drawable.green);
 				}
 
-				else {
+				else
+				{
 					Toast.makeText(_activity.getApplicationContext(),
 							getString(R.string.error_host_connection_failed),
 							Toast.LENGTH_SHORT).show();
@@ -279,16 +297,20 @@ public class InternetSettingsFragment extends Fragment {
 	private URL getServerAdress() throws MalformedURLException {
 		String url = _hostTextview.getText().toString();
 
-		if (url.startsWith("https://")) {
+		if (url.startsWith("https://"))
+		{
 			url = url.replace("https://", "http://");
 		}
-		if (!url.toLowerCase(Locale.US).startsWith("http://")) {
+		if (!url.toLowerCase(Locale.US).startsWith("http://"))
+		{
 			url = "http://" + url;
 		}
-		if (!url.endsWith("/") && !url.endsWith(".php")) {
+		if (!url.endsWith("/") && !url.endsWith(".php"))
+		{
 			url += "/relay.php";
 		}
-		if (url.endsWith("/")) {
+		if (url.endsWith("/"))
+		{
 			url += "relay.php";
 		}
 

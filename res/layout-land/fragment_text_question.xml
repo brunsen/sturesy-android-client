@@ -3,30 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <Button
-            android:id="@+id/questionButton"
+    <TextView
+        android:id="@+id/time_picker_label"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="@string/duration_in_seconds" />
+
+    <EditText
+        android:id="@+id/timePicker"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/time_picker_label"
+        android:layout_toRightOf="@+id/time_picker_label"
+        android:ems="10"
+        android:inputType="number" />
+
+    <LinearLayout
+        android:id="@+id/question_area"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/time_picker_label"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/question_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/question" />
+
+        <EditText
+            android:id="@+id/questionEditText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/question_hint"
+            android:inputType="textMultiLine"
             android:text="" />
-    
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="57dp"
-        android:layout_below="@+id/questionButton"
-        android:text="@string/question_generator_answer"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/ignore_whitespace_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/ignore_case_checkbox"
         android:layout_marginTop="20dp" />
 
@@ -35,10 +56,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/ignore_whitespace_checkbox"
-        android:layout_marginStart="17dp"
         android:layout_marginLeft="17dp"
-        android:layout_toRightOf="@+id/ignore_case_checkbox"
+        android:layout_marginStart="17dp"
         android:layout_toEndOf="@+id/ignore_case_checkbox"
+        android:layout_toRightOf="@+id/ignore_case_checkbox"
         android:text="@string/ignore_case"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -57,13 +78,13 @@
         android:id="@+id/answer_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/questionButton"
+        android:layout_below="@+id/question_area"
         android:layout_marginLeft="21dp"
         android:layout_marginStart="21dp"
-        android:layout_toRightOf="@+id/textView2"
         android:layout_toEndOf="@+id/textView2"
-        android:hint="@string/answer"
-        android:ems="10" >
+        android:layout_toRightOf="@+id/textView2"
+        android:ems="10"
+        android:hint="@string/answer" >
 
         <requestFocus />
     </EditText>
@@ -75,9 +96,9 @@
         android:layout_alignLeft="@+id/answer_edit"
         android:layout_alignStart="@+id/answer_edit"
         android:layout_below="@+id/answer_edit"
-        android:text="0"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:text="0" />
 
     <TextView
         android:id="@+id/textView2"
@@ -97,5 +118,16 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="18dp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/answer_edit"
+        android:layout_alignBottom="@+id/answer_edit"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/question_generator_answer"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

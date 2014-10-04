@@ -17,36 +17,44 @@
  */
 package sturesy.android.controllers.qgen;
 
-import sturesy.android.controllers.HtmlEditorActivity;
+import sturesy.android.controllers.TextInputDialog;
 import sturesy.items.SingleChoiceQuestion;
 import android.app.Fragment;
-import android.content.Intent;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 
 import de.uhh.sturesy_android.R;
+
 /**
  * 
  * @author b.brunsen
  *
  */
 public class SingleQuestionFragment extends Fragment implements
-		OnClickListener, OnItemClickListener {
-
+		OnClickListener, OnItemClickListener, OnTouchListener, TextWatcher {
 	private SingleChoiceQuestion _questionModel;
-	private Button _questionButton;
+	private EditText _questionEditText;
 	private Button _deselectButton;
 	private Button _addAnswerButton;
+	private EditText _timepicker;
+	private int _focusedTextID;
 	private SingleAnswerListAdapter _answerAdapter;
 	private ListView _answerListView;
 	private QuestionListAdapter _questionAdapter;
@@ -69,17 +77,22 @@ public class SingleQuestionFragment extends Fragment implements
 	}
 
 	private void initComponents(View view) {
-		_questionButton = (Button) view.findViewById(R.id.questionButton);
+		_questionEditText = (EditText) view.findViewById(R.id.questionEditText);
 		_answerListView = (ListView) view.findViewById(R.id.editorAnswers);
 		_deselectButton = (Button) view.findViewById(R.id.deselect);
 		_addAnswerButton = (Button) view.findViewById(R.id.addAnswer);
+		_timepicker = (EditText) view.findViewById(R.id.timePicker);
 	}
 
 	private void setListener() {
 		_answerListView.setOnItemClickListener(this);
-		_questionButton.setOnClickListener(this);
+		_questionEditText.setOnClickListener(this);
 		_deselectButton.setOnClickListener(this);
 		_addAnswerButton.setOnClickListener(this);
+		_timepicker.setOnTouchListener(this);
+		_timepicker.addTextChangedListener(this);
+		_questionEditText.setOnTouchListener(this);
+		_questionEditText.addTextChangedListener(this);
 
 	}
 
@@ -88,20 +101,17 @@ public class SingleQuestionFragment extends Fragment implements
 				R.layout.single_answer_list_item, _questionModel);
 		_answerListView.setAdapter(_answerAdapter);
 		setTouchListener(_answerListView, _answerAdapter);
-		_questionButton.setText(_questionModel.getQuestion());
+		_questionEditText.setText(_questionModel.getQuestion());
+		if (_questionModel.getDuration() != -1)
+		{
+			_timepicker.setText("" + _questionModel.getDuration());
+		}
+		_focusedTextID = -1;
 	}
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.questionButton)
-		{
-			Intent editorIntent = new Intent(v.getContext(),
-					HtmlEditorActivity.class);
-			editorIntent.putExtra("Position", -1);
-			editorIntent
-					.putExtra("Question", ((Button) v).getText().toString());
-			startActivityForResult(editorIntent, 1);
-		}
+
 		if (v.getId() == R.id.addAnswer)
 		{
 			if (_questionModel.getAnswerSize() < 10)
@@ -121,39 +131,23 @@ public class SingleQuestionFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Intent editorIntent = new Intent(view.getContext(),
-				HtmlEditorActivity.class);
-		editorIntent.putExtra("Position", position);
-		editorIntent.putExtra("Answer",
-				_questionModel.getAnswers().get(position));
-		startActivityForResult(editorIntent, 1);
-	}
+		final int selectedPosition = position;
+		final TextInputDialog input = new TextInputDialog(getActivity(),
+				getString(R.string.enter_answer));
+		input.setOnDismissListener(new OnDismissListener() {
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == 1)
-		{
-
-			if (resultCode == android.app.Activity.RESULT_OK
-					&& data.getExtras().getInt("Position") == -1)
-			{
-				String text = data.getExtras().getString("Question");
-				_questionButton.setText(text);
-				_questionModel.setQuestion(text);
-				_questionAdapter.notifyDataSetChanged();
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				String updatedText = input.getText();
+				if (!updatedText.equals(""))
+				{
+					_questionModel.getAnswers().set(selectedPosition,
+							updatedText);
+					_answerAdapter.notifyDataSetChanged();
+				}
 			}
-			if (resultCode == android.app.Activity.RESULT_OK
-					&& data.getExtras().getInt("Position") != -1)
-			{
-				int position = data.getExtras().getInt("Position");
-				String text = data.getExtras().getString("Answer");
-				_questionModel.getAnswers().set(position, text);
-				_answerAdapter.notifyDataSetChanged();
-			}
-
-		}
-
+		});
+		input.show();
 	}
 
 	public <T> void setTouchListener(ListView listView,
@@ -183,5 +177,49 @@ public class SingleQuestionFragment extends Fragment implements
 					}
 				});
 		listView.setOnTouchListener(touchListener);
+	}
+
+	// Textwatcher methods
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		String updatedValue = "" + s;
+		switch (_focusedTextID) {
+		case R.id.questionEditText:
+			if (!updatedValue.equals(""))
+			{
+				_questionModel.setQuestion(updatedValue);
+				_questionAdapter.notifyDataSetChanged();
+			}
+			break;
+		case R.id.timePicker:
+			// Handle events to time picker
+			if (updatedValue.equals(""))
+			{
+				_questionModel.setDuration(-1);
+			} else
+			{
+				_questionModel.setDuration(Integer.parseInt(updatedValue));
+			}
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+	}
+
+	// Touchevent listener methods
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		_focusedTextID = v.getId();
+		return false;
 	}
 }

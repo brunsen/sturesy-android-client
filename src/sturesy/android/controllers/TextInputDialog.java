@@ -17,33 +17,56 @@
  */
 package sturesy.android.controllers;
 
+import de.uhh.sturesy_android.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
-import de.uhh.sturesy_android.R;
+import android.widget.EditText;
 /**
- * Simple dialog to display a title and message
+ * Dialog to handle text input from user.
  * @author b.brunsen
  *
  */
-public class ErrorDialog extends Dialog implements
-android.view.View.OnClickListener{
-	public ErrorDialog(Context context, String title, String message) {
+public class TextInputDialog extends Dialog implements OnClickListener{
+
+	private EditText _inputText;
+	private Button _okButton;
+	private String text;
+	private boolean _validText;
+	
+	public TextInputDialog(Context context, String title) {
 		super(context);
-		setContentView(R.layout.dialog_error);
+		setContentView(R.layout.dialog_text_input);
 		setTitle(title);
-		TextView tv = (TextView)findViewById(R.id.dialog_error_message);
-		tv.setText(message);
-		Button button = (Button)findViewById(R.id.dialog_error_button);
-		button.setText(R.string.OK);
-		button.setOnClickListener(this);
+		_inputText = (EditText) findViewById(R.id.dialog_text_input);
+		_okButton = (Button) findViewById(R.id.dialog_ok_button);
+		_okButton.setOnClickListener(this);
+		set_validText(false);
 	}
 
 	@Override
 	public void onClick(View v) {
+		setText(_inputText.getText().toString());
+		set_validText(true);
 		dismiss();
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	private void setText(String text) {
+		this.text = text;
+	}
+
+	public boolean is_validText() {
+		return _validText;
+	}
+
+	private void set_validText(boolean _validText) {
+		this._validText = _validText;
 	}
 
 }
