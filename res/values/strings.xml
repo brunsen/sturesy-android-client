@@ -54,7 +54,7 @@
     <string name="enter_answer">Antwort eingeben</string>
     <string name="question_save_successful">Das Frageset wurde erfolgreich gespeichert</string>
     <string name="error_saving_questions">Fehler beim Speichern des Fragesets</string>
-    <string name="error_no_questionset_name">Bitte geben Sie einen Namen für den Fragensatz an!</string>
+    <string name="error_no_questionset_name">Bitte geben Sie einen Namen für den Fragensatz an und/oder fügen Sie weitere Fragen hinzu!</string>
     <string name="error_file_already_exist">Der angegebene Name des Fragesets konnte nicht verwendet werden. Die Fragen wurden unter dem bisherigen Namen gespeichert.</string>
 
     <!-- Voting Analysis -->

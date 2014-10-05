@@ -35,7 +35,6 @@ import sturesy.util.web.WebCommands;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +54,6 @@ import de.uhh.sturesy_android.R;
 public class InternetSettingsFragment extends Fragment {
 	private Settings _settings;
 	private Activity _activity;
-	private BackgroundWorker _checkHost;
 	private EditText _idTextView;
 	private EditText _passwordTextview;
 	private EditText _hostTextview;
@@ -117,36 +115,61 @@ public class InternetSettingsFragment extends Fragment {
 	 * @param v
 	 */
 	public void redeemToken(View v) {
-		_settings.setProperty(Settings.SERVERADDRESS, _hostTextview.getText()
-				.toString());
-		if (_tokenfield.getText().toString().length() != 0)
+		String host = _hostTextview.getText().toString();
+		if (!host.equals(""))
 		{
-			try
-			{
-				String result = WebCommands.redeemToken(
-						_settings.getString(Settings.SERVERADDRESS),
-						_tokenfield.getText().toString().trim());
-				String name = result.split(";")[0];
-				String pw = result.split(";")[1];
+			_settings.setProperty(Settings.SERVERADDRESS, _hostTextview
+					.getText().toString());
+			BackgroundWorker redeemer = new BackgroundWorker() {
+				boolean error = false;
+				String name = "";
+				String pw = "";
 
-				if (name.length() < 30)
-				{
-					_idTextView.setText(name);
-					_passwordTextview.setText(pw);
-					Toast.makeText(_activity,
-							getString(R.string.token_redemption_success),
-							Toast.LENGTH_LONG).show();
-				} else
-				{
-					throw new Exception();
+				@Override
+				public void postExecute() {
+					if (name.length() < 30)
+					{
+						_idTextView.setText(name);
+						_passwordTextview.setText(pw);
+					} else
+					{
+						error = true;
+					}
+
+					if (error)
+					{
+						Dialog alert = new ErrorDialog(_activity,
+								getString(R.string.error),
+								getString(R.string.error_tokenredemption));
+						alert.show();
+					}
+					else{
+						Toast.makeText(_activity,
+								getString(R.string.token_redemption_success),
+								Toast.LENGTH_LONG).show();
+					}
+
 				}
-			} catch (Exception ex)
-			{
-				Dialog alert = new ErrorDialog(_activity,
-						getString(R.string.error),
-						getString(R.string.error_tokenredemption));
-				alert.show();
-			}
+
+				@Override
+				public void inBackground() {
+					String result;
+					try
+					{
+						result = WebCommands.redeemToken(
+								_settings.getString(Settings.SERVERADDRESS),
+								_tokenfield.getText().toString().trim());
+						name = result.split(";")[0];
+						pw = result.split(";")[1];
+					} catch (Exception e)
+					{
+						Log.error(e.getMessage(), e.getCause());
+						error = true;
+					}
+
+				}
+			};
+			redeemer.execute();
 		}
 	}
 
@@ -247,7 +270,7 @@ public class InternetSettingsFragment extends Fragment {
 	 * @param v
 	 */
 	public void checkHost(View v) {
-		_checkHost = new BackgroundWorker() {
+		BackgroundWorker checkHost = new BackgroundWorker() {
 			boolean validresult = false;
 
 			public void inBackground() {
@@ -290,7 +313,7 @@ public class InternetSettingsFragment extends Fragment {
 			}
 
 		};
-		_checkHost.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		checkHost.execute();
 
 	}
 

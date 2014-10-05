@@ -384,7 +384,8 @@ public class QuestionGeneratorActivity extends Activity {
 	public void save() {
 
 		if (_currentFile != null
-				&& !_fileNameEdit.getText().toString().equals(""))
+				&& !_fileNameEdit.getText().toString().equals("")
+				&& !_currentQuestionset.getQuestionModels().isEmpty())
 		{
 			String newFileName = _fileNameEdit.getText().toString();
 			QuestionModel currentQuestionModel = _currentQuestionset

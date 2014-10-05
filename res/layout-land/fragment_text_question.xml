@@ -5,8 +5,9 @@
 
     <TextView
         android:id="@+id/time_picker_label"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:text="@string/duration_in_seconds" />
 
     <EditText

@@ -17,13 +17,13 @@
  */
 package sturesy.android.controllers;
 
-import de.uhh.sturesy_android.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import de.uhh.sturesy_android.R;
 /**
  * Dialog to handle text input from user.
  * @author b.brunsen
