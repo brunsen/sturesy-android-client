@@ -19,6 +19,8 @@ package sturesy.android.controllers.qgen;
 
 import java.util.List;
 
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
+
 import sturesy.items.QuestionModel;
 import android.app.Activity;
 import android.content.Context;
@@ -30,19 +32,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import de.uhh.sturesy_android.R;
+
 /**
  *
  * @author b.brunsen
  *
  */
-public class QuestionListAdapter extends ArrayAdapter<QuestionModel> {
+public class QuestionListAdapter extends ArrayAdapter<QuestionModel> implements
+		UndoAdapter {
 
 	private List<QuestionModel> _items;
 	private int _layoutResourceId;
 	private Context _context;
 
-	public QuestionListAdapter(Context context, int resource, List<QuestionModel> objects) {
-		super(context,resource,objects);
+	public QuestionListAdapter(Context context, int resource,
+			List<QuestionModel> objects) {
+		super(context, resource, objects);
 		_layoutResourceId = R.layout.question_list_item;
 		_context = context;
 		_items = objects;
@@ -52,14 +57,18 @@ public class QuestionListAdapter extends ArrayAdapter<QuestionModel> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final int currentPosition = position;
 		View row = convertView;
-		if (row == null) {
+		if (row == null)
+		{
 			LayoutInflater inflater = ((Activity) _context).getLayoutInflater();
 			row = inflater.inflate(_layoutResourceId, parent, false);
 		}
 		String text = _items.get(position).getQuestion();
-		TextView answerTextView = (TextView) row.findViewById(R.id.QuestionText);
-		if (text != null) {
-			if (answerTextView != null) {
+		TextView answerTextView = (TextView) row
+				.findViewById(R.id.QuestionText);
+		if (text != null)
+		{
+			if (answerTextView != null)
+			{
 				answerTextView.setText((CharSequence) text);
 			}
 		}
@@ -78,8 +87,8 @@ public class QuestionListAdapter extends ArrayAdapter<QuestionModel> {
 		down.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
-				swapItems(currentPosition, 1,v);
+
+				swapItems(currentPosition, 1, v);
 				notifyDataSetChanged();
 
 			}
@@ -97,15 +106,30 @@ public class QuestionListAdapter extends ArrayAdapter<QuestionModel> {
 	 */
 	public void swapItems(int index, int direction, View v) {
 		if ((index != 0 && direction == -1)
-				|| (index != _items.size() - 1 && direction == 1)) {
+				|| (index != _items.size() - 1 && direction == 1))
+		{
 			_items.add(index + direction, _items.remove(index));
-			Activity act = ((Activity)v.getContext());
-			if(act instanceof QuestionGeneratorActivity)
+			Activity act = ((Activity) v.getContext());
+			if (act instanceof QuestionGeneratorActivity)
 			{
-//				((QuestionGeneratorActivity) act).getCurrentQuestionSet().swapElements(index, index + direction);
-				((QuestionGeneratorActivity) act).swapQuestions(index, index + direction);
+				((QuestionGeneratorActivity) act).swapQuestions(index, index
+						+ direction);
 			}
 		}
 	}
-	
+
+	@Override
+	public View getUndoClickView(View view) {
+		return view.findViewById(R.id.undo_row_undobutton);
+	}
+
+	@Override
+	public View getUndoView(int arg0, View arg1, ViewGroup parent) {
+		View view = arg1;
+		if (view == null) {
+		view = LayoutInflater.from(getContext()).inflate(R.layout.undo_row, parent, false);
+		}
+		return view;
+	}
+
 }

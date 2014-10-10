@@ -20,6 +20,8 @@ package sturesy.android.controllers.qgen;
 import java.util.Collections;
 import java.util.List;
 
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
+
 import sturesy.items.SingleChoiceQuestion;
 import android.app.Activity;
 import android.content.Context;
@@ -32,12 +34,14 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import de.uhh.sturesy_android.R;
+
 /**
  * 
  * @author b.brunsen
  *
  */
-public class SingleAnswerListAdapter extends ArrayAdapter<String> {
+public class SingleAnswerListAdapter extends ArrayAdapter<String> implements
+		UndoAdapter {
 
 	private int _selectedIndex;
 	private List<String> _items;
@@ -45,7 +49,8 @@ public class SingleAnswerListAdapter extends ArrayAdapter<String> {
 	private int _layoutResourceId;
 	private Context _context;
 
-	public SingleAnswerListAdapter(Context context, int resource, SingleChoiceQuestion qm) {
+	public SingleAnswerListAdapter(Context context, int resource,
+			SingleChoiceQuestion qm) {
 		super(context, resource, qm.getAnswers());
 		_layoutResourceId = R.layout.single_answer_list_item;
 		_context = context;
@@ -58,24 +63,29 @@ public class SingleAnswerListAdapter extends ArrayAdapter<String> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final int currentPosition = position;
 		View row = convertView;
-		if (row == null) {
+		if (row == null)
+		{
 			LayoutInflater inflater = ((Activity) _context).getLayoutInflater();
 			row = inflater.inflate(_layoutResourceId, parent, false);
 		}
 		String text = _items.get(position);
 		TextView answerTextView = (TextView) row.findViewById(R.id.AnswerText);
-		if (text != null) {
-			if (answerTextView != null) {
+		if (text != null)
+		{
+			if (answerTextView != null)
+			{
 				answerTextView.setText((CharSequence) text);
 			}
 		}
 
-		
-		RadioButton rb = (RadioButton) row.findViewById(R.id.correct_anwer_radio);
+		RadioButton rb = (RadioButton) row
+				.findViewById(R.id.correct_anwer_radio);
 
-		if (getSelectedIndex() == position) {
+		if (getSelectedIndex() == position)
+		{
 			rb.setChecked(true);
-		} else {
+		} else
+		{
 			rb.setChecked(false);
 		}
 		rb.setOnClickListener(new OnClickListener() {
@@ -119,13 +129,16 @@ public class SingleAnswerListAdapter extends ArrayAdapter<String> {
 	 */
 	public void swapItems(int index, int direction) {
 		if ((index != 0 && direction == -1)
-				|| (index != _items.size() - 1 && direction == 1)) {
+				|| (index != _items.size() - 1 && direction == 1))
+		{
 			Collections.swap(_items, index, index + direction);
-			if (index == getSelectedIndex()) {
+			if (index == getSelectedIndex())
+			{
 				setSelectedIndex(index + direction);
 			}
-			
-			else if(index + direction == getSelectedIndex()){
+
+			else if (index + direction == getSelectedIndex())
+			{
 				setSelectedIndex(index);
 			}
 		}
@@ -139,5 +152,20 @@ public class SingleAnswerListAdapter extends ArrayAdapter<String> {
 	public int getSelectedIndex() {
 		return _selectedIndex;
 	}
-	
+
+	@Override
+	public View getUndoClickView(View view) {
+		return view.findViewById(R.id.undo_row_undobutton);
+	}
+
+	@Override
+	public View getUndoView(int arg0, View arg1, ViewGroup parent) {
+		View view = arg1;
+		if (view == null)
+		{
+			view = LayoutInflater.from(getContext()).inflate(R.layout.undo_row,
+					parent, false);
+		}
+		return view;
+	}
 }

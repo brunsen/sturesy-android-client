@@ -52,14 +52,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 
 import de.uhh.sturesy_android.R;
 
@@ -72,7 +74,7 @@ public class QuestionGeneratorActivity extends Activity {
 	private File _currentFile;
 	private String _lecturesDirectory;
 	private EditText _fileNameEdit;
-	private ListView _questionListView;
+	private DynamicListView _questionListView;
 	private Fragment _currentFragment;
 	// required for adding questions with dialog
 	private int _questionChoice;
@@ -113,7 +115,7 @@ public class QuestionGeneratorActivity extends Activity {
 
 	private void initComponents() {
 		_fileNameEdit = (EditText) findViewById(R.id.catalogueTitle);
-		_questionListView = (ListView) findViewById(R.id.questionList);
+		_questionListView = (DynamicListView) findViewById(R.id.questionList);
 	}
 
 	@Override
@@ -148,49 +150,47 @@ public class QuestionGeneratorActivity extends Activity {
 	 * @param v
 	 */
 	public void addItem(View v) {
-		if (v.getId() == R.id.questionListAdd)
+
+		if (_currentFile != null)
 		{
-			if (_currentFile != null)
-			{
-				final SelectQuestionDialog dialog = new SelectQuestionDialog(
-						this);
-				dialog.setOnDismissListener(new OnDismissListener() {
+			final SelectQuestionDialog dialog = new SelectQuestionDialog(this);
+			dialog.setOnDismissListener(new OnDismissListener() {
 
-					@Override
-					public void onDismiss(DialogInterface dialog2) {
-						setQuestionChoice(dialog.getChoice());
-						QuestionModel qm = null;
-						switch (getQuestionChoice()) {
-						case 0:
-							qm = new SingleChoiceQuestion();
-							break;
+				@Override
+				public void onDismiss(DialogInterface dialog2) {
+					setQuestionChoice(dialog.getChoice());
+					QuestionModel qm = null;
+					switch (getQuestionChoice()) {
+					case 0:
+						qm = new SingleChoiceQuestion();
+						break;
 
-						case 1:
-							qm = new MultipleChoiceQuestion();
-							break;
+					case 1:
+						qm = new MultipleChoiceQuestion();
+						break;
 
-						case 2:
-							qm = new TextQuestion();
-							break;
-						default:
-							qm = null;
-							break;
-						}
-						setQuestionChoice(-1);
-						if (qm != null)
-						{
-							qm.setQuestion(getString(R.string.new_question));
-							_currentQuestionset.addQuestionModel(qm);
-							_questionAdapter.notifyDataSetChanged();
-							_currentQuestion = _questionAdapter.getCount() - 1;
-							setQuestion(qm);
-						}
+					case 2:
+						qm = new TextQuestion();
+						break;
+					default:
+						qm = null;
+						break;
 					}
-				});
-				dialog.show();
+					setQuestionChoice(-1);
+					if (qm != null)
+					{
+						qm.setQuestion(getString(R.string.new_question));
+						_currentQuestionset.addQuestionModel(qm);
+						_questionAdapter.notifyDataSetChanged();
+						_currentQuestion = _questionAdapter.getCount() - 1;
+						setQuestion(qm);
+					}
+				}
+			});
+			dialog.show();
 
-			}
 		}
+
 	}
 
 	/**
@@ -200,19 +200,13 @@ public class QuestionGeneratorActivity extends Activity {
 	 * @param listView
 	 * @param adapter
 	 */
-	public <T> void setTouchListener(ListView listView,
+	public <T> void setTouchListener(DynamicListView listView,
 			final ArrayAdapter<T> adapter) {
-		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(
-				listView,
-				new SwipeDismissListViewTouchListener.DismissCallbacks() {
+		SimpleSwipeUndoAdapter swipeUndoAdapter = new SimpleSwipeUndoAdapter(
+				adapter, this, new OnDismissCallback() {
 					@Override
-					public boolean canDismiss(int position) {
-						return true;
-					}
-
-					@Override
-					public void onDismiss(ListView listView,
-							int[] reverseSortedPositions) {
+					public void onDismiss(final ViewGroup listView,
+							final int[] reverseSortedPositions) {
 						for (int position : reverseSortedPositions)
 						{
 							adapter.remove(adapter.getItem(position));
@@ -226,11 +220,13 @@ public class QuestionGeneratorActivity extends Activity {
 								transaction.commit();
 								_currentFragment = null;
 							}
+							adapter.notifyDataSetChanged();
 						}
-						adapter.notifyDataSetChanged();
 					}
 				});
-		listView.setOnTouchListener(touchListener);
+		swipeUndoAdapter.setAbsListView(listView);
+		listView.setAdapter(swipeUndoAdapter);
+		listView.enableSimpleSwipeUndo();
 	}
 
 	private void importQTI() {

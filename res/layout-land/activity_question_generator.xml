@@ -32,7 +32,7 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <ListView
+        <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
             android:id="@+id/questionList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -20,6 +20,8 @@ package sturesy.android.controllers.qgen;
 import java.util.Collections;
 import java.util.List;
 
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
+
 import sturesy.items.MultipleChoiceQuestion;
 import android.app.Activity;
 import android.content.Context;
@@ -33,15 +35,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import de.uhh.sturesy_android.R;
 
-public class MultipleAnswerListAdapter extends ArrayAdapter<String>{
-	
+public class MultipleAnswerListAdapter extends ArrayAdapter<String> implements
+		UndoAdapter {
+
 	private List<Integer> _selectedIndex;
 	private List<String> _items;
 	private MultipleChoiceQuestion _multipleQuestion;
 	private int _layoutResourceId;
 	private Context _context;
-	
-	public MultipleAnswerListAdapter(Context context, int resource, MultipleChoiceQuestion qm) {
+
+	public MultipleAnswerListAdapter(Context context, int resource,
+			MultipleChoiceQuestion qm) {
 		super(context, resource, qm.getAnswers());
 		_layoutResourceId = R.layout.multiple_answer_list_item;
 		_context = context;
@@ -49,29 +53,34 @@ public class MultipleAnswerListAdapter extends ArrayAdapter<String>{
 		_items = qm.getAnswers();
 		_selectedIndex = qm.getCorrectAnswers();
 	}
-	
+
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		final int currentPosition = position;
 		View row = convertView;
-		if (row == null) {
+		if (row == null)
+		{
 			LayoutInflater inflater = ((Activity) _context).getLayoutInflater();
 			row = inflater.inflate(_layoutResourceId, parent, false);
 		}
 		String text = _items.get(position);
 		TextView answerTextView = (TextView) row.findViewById(R.id.AnswerText);
-		if (text != null) {
-			if (answerTextView != null) {
+		if (text != null)
+		{
+			if (answerTextView != null)
+			{
 				answerTextView.setText((CharSequence) text);
 			}
 		}
 
-		
-		final CheckBox check = (CheckBox) row.findViewById(R.id.correct_anwer_check);
+		final CheckBox check = (CheckBox) row
+				.findViewById(R.id.correct_anwer_check);
 
-		if (_selectedIndex.contains(position)) {
+		if (_selectedIndex.contains(position))
+		{
 			check.setChecked(true);
-		} else {
+		} else
+		{
 			check.setChecked(false);
 		}
 		check.setOnClickListener(new OnClickListener() {
@@ -79,9 +88,11 @@ public class MultipleAnswerListAdapter extends ArrayAdapter<String>{
 			@Override
 			public void onClick(View v) {
 				Integer parsedPosition = Integer.valueOf(position);
-				if (_selectedIndex.contains(parsedPosition)) {
+				if (_selectedIndex.contains(parsedPosition))
+				{
 					_selectedIndex.remove(parsedPosition);
-				} else {
+				} else
+				{
 					_selectedIndex.add(parsedPosition);
 				}
 				notifyDataSetChanged();
@@ -120,18 +131,22 @@ public class MultipleAnswerListAdapter extends ArrayAdapter<String>{
 	 */
 	public void swapItems(int index, int direction) {
 		if ((index != 0 && direction == -1)
-				|| (index != _items.size() - 1 && direction == 1)) {
+				|| (index != _items.size() - 1 && direction == 1))
+		{
 			Collections.swap(_items, index, index + direction);
 
-			
-			if (getSelectedIndex().contains(index)&& !getSelectedIndex().contains(index + direction)) {
+			if (getSelectedIndex().contains(index)
+					&& !getSelectedIndex().contains(index + direction))
+			{
 				_selectedIndex.add(index + direction);
 				_selectedIndex.remove(index);
 			}
-			
-			else if(!getSelectedIndex().contains(index)&& getSelectedIndex().contains(index + direction)){
+
+			else if (!getSelectedIndex().contains(index)
+					&& getSelectedIndex().contains(index + direction))
+			{
 				_selectedIndex.add(index);
-				_selectedIndex.remove(index+direction);
+				_selectedIndex.remove(index + direction);
 			}
 		}
 	}
@@ -144,8 +159,24 @@ public class MultipleAnswerListAdapter extends ArrayAdapter<String>{
 	public List<Integer> getSelectedIndex() {
 		return _selectedIndex;
 	}
-	
-	public void resetCorrectAnswer(){
+
+	public void resetCorrectAnswer() {
 		_multipleQuestion.getCorrectAnswers().clear();
+	}
+
+	@Override
+	public View getUndoClickView(View view) {
+		return view.findViewById(R.id.undo_row_undobutton);
+	}
+
+	@Override
+	public View getUndoView(int arg0, View arg1, ViewGroup parent) {
+		View view = arg1;
+		if (view == null)
+		{
+			view = LayoutInflater.from(getContext()).inflate(R.layout.undo_row,
+					parent, false);
+		}
+		return view;
 	}
 }

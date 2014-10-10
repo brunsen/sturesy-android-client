@@ -36,9 +36,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
-import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 
 import de.uhh.sturesy_android.R;
 
@@ -56,7 +57,7 @@ public class SingleQuestionFragment extends Fragment implements
 	private EditText _timepicker;
 	private int _focusedTextID;
 	private SingleAnswerListAdapter _answerAdapter;
-	private ListView _answerListView;
+	private DynamicListView _answerListView;
 	private QuestionListAdapter _questionAdapter;
 
 	public SingleQuestionFragment(SingleChoiceQuestion qm,
@@ -78,7 +79,8 @@ public class SingleQuestionFragment extends Fragment implements
 
 	private void initComponents(View view) {
 		_questionEditText = (EditText) view.findViewById(R.id.questionEditText);
-		_answerListView = (ListView) view.findViewById(R.id.editorAnswers);
+		_answerListView = (DynamicListView) view
+				.findViewById(R.id.editorAnswers);
 		_deselectButton = (Button) view.findViewById(R.id.deselect);
 		_addAnswerButton = (Button) view.findViewById(R.id.addAnswer);
 		_timepicker = (EditText) view.findViewById(R.id.timePicker);
@@ -150,19 +152,14 @@ public class SingleQuestionFragment extends Fragment implements
 		input.show();
 	}
 
-	public <T> void setTouchListener(ListView listView,
+	public <T> void setTouchListener(DynamicListView listView,
 			final ArrayAdapter<T> adapter) {
-		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(
-				listView,
-				new SwipeDismissListViewTouchListener.DismissCallbacks() {
+		SimpleSwipeUndoAdapter swipeUndoAdapter = new SimpleSwipeUndoAdapter(
+				adapter, getActivity(), new OnDismissCallback() {
 					@Override
-					public boolean canDismiss(int position) {
-						return true;
-					}
+					public void onDismiss(final ViewGroup listView,
+							final int[] reverseSortedPositions) {
 
-					@Override
-					public void onDismiss(ListView listView,
-							int[] reverseSortedPositions) {
 						for (int position : reverseSortedPositions)
 						{
 							adapter.remove(adapter.getItem(position));
@@ -174,9 +171,12 @@ public class SingleQuestionFragment extends Fragment implements
 							_questionModel.setCorrectAnswer(-1);
 						}
 						adapter.notifyDataSetChanged();
+
 					}
 				});
-		listView.setOnTouchListener(touchListener);
+		swipeUndoAdapter.setAbsListView(listView);
+		listView.setAdapter(swipeUndoAdapter);
+		listView.enableSimpleSwipeUndo();
 	}
 
 	// Textwatcher methods

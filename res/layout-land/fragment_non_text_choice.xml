@@ -8,8 +8,8 @@
         android:id="@+id/time_picker_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="@string/duration_in_seconds" />
+        android:text="@string/duration_in_seconds"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/timePicker"
@@ -44,13 +44,12 @@
             android:text="" />
     </LinearLayout>
 
-    <ListView
+    <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
         android:id="@+id/editorAnswers"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_above="@+id/addAnswer"
-        android:layout_below="@id/question_area" >
-    </ListView>
+        android:layout_below="@id/question_area" />
 
     <Button
         android:id="@+id/deselect"

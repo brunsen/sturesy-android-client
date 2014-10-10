@@ -56,6 +56,8 @@
     <string name="error_saving_questions">Fehler beim Speichern des Fragesets</string>
     <string name="error_no_questionset_name">Bitte geben Sie einen Namen für den Fragensatz an und/oder fügen Sie weitere Fragen hinzu!</string>
     <string name="error_file_already_exist">Der angegebene Name des Fragesets konnte nicht verwendet werden. Die Fragen wurden unter dem bisherigen Namen gespeichert.</string>
+    <string name="deleted">Entfernt</string>
+    <string name="tap_toundo">Rückgängig</string>
 
     <!-- Voting Analysis -->
     <string name="error_csv_message">Die abgegebenen Stimmen konnten nicht in eine csv Datei gespeichert werden.</string>
