@@ -7,8 +7,8 @@
         android:id="@+id/time_picker_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="@string/duration_in_seconds" />
+        android:text="@string/duration_in_seconds"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/timePicker"
@@ -31,12 +31,12 @@
             android:id="@+id/question_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/question" />
+            android:text="@string/question"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/questionEditText"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/question_hint"
             android:inputType="textMultiLine"
@@ -51,29 +51,6 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/ignore_case_checkbox"
         android:layout_marginTop="20dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/ignore_whitespace_checkbox"
-        android:layout_marginLeft="17dp"
-        android:layout_marginStart="17dp"
-        android:layout_toEndOf="@+id/ignore_case_checkbox"
-        android:layout_toRightOf="@+id/ignore_case_checkbox"
-        android:text="@string/ignore_case"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/ignore_whitespace_checkbox"
-        android:layout_alignBottom="@+id/ignore_whitespace_checkbox"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:text="@string/ignore_white_space"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/answer_edit"
@@ -98,8 +75,7 @@
         android:layout_alignStart="@+id/answer_edit"
         android:layout_below="@+id/answer_edit"
         android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="0" />
+        android:inputType="numberDecimal" />
 
     <TextView
         android:id="@+id/textView2"
@@ -109,7 +85,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:text="@string/tolerance"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textStyle="bold" />
 
     <CheckBox
         android:id="@+id/ignore_case_checkbox"
@@ -129,6 +105,28 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:text="@string/question_generator_answer"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/ignore_case_checkbox"
+        android:layout_alignBottom="@+id/ignore_case_checkbox"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
+        android:layout_toEndOf="@+id/ignore_case_checkbox"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="@string/ignore_case" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/ignore_whitespace_checkbox"
+        android:layout_alignBottom="@+id/ignore_whitespace_checkbox"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3"
+        android:text="@string/ignore_white_space" />
 
 </RelativeLayout>

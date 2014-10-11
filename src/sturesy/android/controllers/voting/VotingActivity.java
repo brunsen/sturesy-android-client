@@ -103,7 +103,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		_currentQuestion = 0;
 		_votingService = new TechnicalVotingServiceImpl(this, this,
 				SturesyManager.getLoadedPollPlugins());
-		Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs();
+		Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs(this);
 		if (lectureIDs.isEmpty())
 		{
 			_lectureID = null;

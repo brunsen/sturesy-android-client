@@ -88,7 +88,6 @@
     <string name="token_redemption_success">Auslesen des Tokens war erfolgreich</string>
     <string name="error_tokenredemption">Fehler beim Auslesen des Tokens.</string>
     <string name="error_no_valid_host_provided">Es wurde keine gültige URL angegeben</string>
-    <string name="error_saving_lecture_id">Fehler beim speichern der LectureID.</string>
     <string name="error_no_lecture_id_provided">Es wurde keine ID angegeben</string>
     <string name="error_no_password_provided">Es wurde kein Password angegeben</string>
     <string name="host_connection_success">Verbinden mit dem Server war erfolgreich</string>

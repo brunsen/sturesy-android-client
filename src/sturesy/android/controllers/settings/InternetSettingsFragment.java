@@ -22,12 +22,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import sturesy.android.controllers.ErrorDialog;
 import sturesy.core.Log;
 import sturesy.items.LectureID;
-import sturesy.services.serialization.LectureIDPersister;
 import sturesy.util.BackgroundWorker;
 import sturesy.util.Settings;
 import sturesy.util.SturesyManager;
@@ -72,12 +72,12 @@ public class InternetSettingsFragment extends Fragment {
 		View view = (LinearLayout) inflater.inflate(
 				R.layout.internet_settings_fragment, container, false);
 		_settings = SturesyManager.getSettings();
-		Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs();
+		_activity = getActivity();
+		Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs(_activity);
 		if (lectureIDs == null)
 		{
 			lectureIDs = new ArrayList<LectureID>();
 		}
-		_activity = getActivity();
 		initComponents(view);
 		if (!lectureIDs.isEmpty())
 		{
@@ -222,24 +222,10 @@ public class InternetSettingsFragment extends Fragment {
 				alert.show();
 				return;
 			}
-
-			Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs();
+			Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs(_activity);
 			lectureIDs.clear();
 			lectureIDs.add(new LectureID(id, password, host));
-			String fileName = SturesyManager.getMainDirectory() + "/lid.xml";
-			LectureIDPersister persister = new LectureIDPersister();
-			try
-			{
-				persister.saveToFile(fileName,
-						(ArrayList<LectureID>) lectureIDs);
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-				ErrorDialog alert = new ErrorDialog(_activity,
-						getString(R.string.error),
-						getString(R.string.error_saving_lecture_id));
-				alert.show();
-			}
+			SturesyManager.storeLectureIDs((List<LectureID>) lectureIDs, _activity);
 			Toast.makeText(_activity.getApplicationContext(),
 					getString(R.string.saving_lecture_id_success),
 					Toast.LENGTH_SHORT).show();
@@ -339,4 +325,5 @@ public class InternetSettingsFragment extends Fragment {
 
 		return new URL(url);
 	}
+	
 }

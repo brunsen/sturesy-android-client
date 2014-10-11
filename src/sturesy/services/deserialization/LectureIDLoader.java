@@ -17,9 +17,8 @@
  */
 package sturesy.services.deserialization;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,22 +34,20 @@ import sturesy.items.LectureID;
  *
  */
 public class LectureIDLoader {
-	
-	public List<LectureID> loadFromFile(String fileName) throws XmlPullParserException, IOException
+
+	public List<LectureID> loadFromString(String xml) throws XmlPullParserException, IOException
 	{
 		List <LectureID> ids = new ArrayList<LectureID>();
 		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser parser = factory.newPullParser();
-        
-        FileReader reader = new FileReader(new File(fileName));
-        parser.setInput(reader);
-
-        processXML(parser, ids);
+        StringReader reader = new StringReader(xml);
+		parser.setInput(reader);
+		processXML(parser, ids);
         reader.close();
 		return ids;
 	}
-
+	
 	private void processXML(XmlPullParser xpp, List<LectureID> ids) throws XmlPullParserException, IOException {
 		String id = "";
 		String password = "";

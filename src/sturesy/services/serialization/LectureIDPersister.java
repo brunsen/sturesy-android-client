@@ -17,12 +17,9 @@
  */
 package sturesy.services.serialization;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import sturesy.core.Log;
-import sturesy.core.backend.services.FileIOService;
 import sturesy.items.LectureID;
 import sturesy.util.Crypt;
 /**
@@ -33,25 +30,11 @@ import sturesy.util.Crypt;
 public class LectureIDPersister {
 	
 	/**
-	 * Writes a list of LectureId objects into a file.
-	 * @param fileName String representation of the path to the file, where the ids shall be stored.
-	 * @param lectureIDs List of LectureID objects to be stored.
-	 * @throws IOException 
-	 */
-	public void saveToFile(String fileName, List<LectureID> lectureIDs) throws IOException
-	{
-		String xml = toXML(lectureIDs);
-		FileIOService fileService = new FileIOService();
-		File f = new File(fileName);
-			fileService.writeToFileCreateIfNotExist(f, xml);
-	}
-	
-	/**
 	 * Writes a list of LectureID objects into a xml String.
 	 * @param lectureIds list of ids to be saved.
 	 * @return xml string containing data of all LectureID objects.
 	 */
-    private String toXML(List<LectureID> lectureIds)
+    public String toXML(List<LectureID> lectureIds)
     {
         StringBuilder builder = new StringBuilder();
         for (LectureID lectureID : lectureIds) {

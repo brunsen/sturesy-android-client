@@ -1,4 +1,5 @@
 package sturesy.util;
+
 /*
  * StuReSy - Student Response System
  * Copyright (C) 2012-2014  StuReSy-Team
@@ -17,7 +18,6 @@ package sturesy.util;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -34,149 +35,163 @@ import sturesy.core.plugin.IPlugin;
 import sturesy.core.plugin.IPollPlugin;
 import sturesy.items.LectureID;
 import sturesy.services.deserialization.LectureIDLoader;
+import sturesy.services.serialization.LectureIDPersister;
 import sturesy.util.web.WebVotingHandler;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
-public class SturesyManager
-{
+public class SturesyManager {
 
-    private static final String PLUGINS_FOLDER = "/plugins";
-    private static final String LECTURES_FOLDER = "/lectures";
+	private static final String PLUGINS_FOLDER = "/plugins";
+	private static final String LECTURES_FOLDER = "/lectures";
 
-    private static File MAINDIRECTORY;
+	private static File MAINDIRECTORY;
 
-    private static Settings _settings;
-    private static Set<IPlugin> _loadedPlugins = new HashSet<IPlugin>();
+	private static Settings _settings;
+	private static Set<IPlugin> _loadedPlugins = new HashSet<IPlugin>();
 
-    private static Collection<LectureID> _lectureIDs = null;
+	private static Collection<LectureID> _lectureIDs = null;
 
-    public static Settings getSettings()
-    {
-        if (_settings == null)
-        {
-            _settings = Settings.getInstance();
-        }
+	public static Settings getSettings() {
+		if (_settings == null)
+		{
+			_settings = Settings.getInstance();
+		}
 
-        return _settings;
-    }
+		return _settings;
+	}
 
-    public static void setLoadedPlugins(Collection<IPlugin> plugins)
-    {
-        _loadedPlugins.addAll(plugins);
-    }
+	public static void setLoadedPlugins(Collection<IPlugin> plugins) {
+		_loadedPlugins.addAll(plugins);
+	}
 
-    /**
-     * Returns an unmodifiable Set of all the loaded Plugins
-     */
-    public static Set<IPlugin> getLoadedPlugins()
-    {
-        return Collections.unmodifiableSet(_loadedPlugins);
-    }
+	/**
+	 * Returns an unmodifiable Set of all the loaded Plugins
+	 */
+	public static Set<IPlugin> getLoadedPlugins() {
+		return Collections.unmodifiableSet(_loadedPlugins);
+	}
 
-    /**
-     * Returns a new Set of loaded {@link IPollPlugin}
-     */
-    public static Set<IPollPlugin> getLoadedPollPlugins()
-    {
-        LinkedHashSet<IPollPlugin> result = new LinkedHashSet<IPollPlugin>();
+	/**
+	 * Returns a new Set of loaded {@link IPollPlugin}
+	 */
+	public static Set<IPollPlugin> getLoadedPollPlugins() {
+		LinkedHashSet<IPollPlugin> result = new LinkedHashSet<IPollPlugin>();
 
-        if (getSettings().getBoolean(Settings.WEB_PLUGIN_ENABLED))
-        {
-            result.add((IPollPlugin) new WebVotingHandler());
-        }
+		if (getSettings().getBoolean(Settings.WEB_PLUGIN_ENABLED))
+		{
+			result.add((IPollPlugin) new WebVotingHandler());
+		}
 
-        for (IPlugin plug : getLoadedPlugins())
-        {
-            IPollPlugin pollPlugin = plug.getPollPlugin();
-            if (pollPlugin != null)
-            {
-                result.add(pollPlugin);
-            }
-        }
+		for (IPlugin plug : getLoadedPlugins())
+		{
+			IPollPlugin pollPlugin = plug.getPollPlugin();
+			if (pollPlugin != null)
+			{
+				result.add(pollPlugin);
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    public static Collection<LectureID> getLectureIDs()
-    {
-        if (_lectureIDs == null)
-        {
-            try
-            {
-            	LectureIDLoader loader = new LectureIDLoader();
-            	File f = new File(getMainDirectory() + "/lid.xml"); 
-            	if(!f.exists())
-            	{
-            		f.createNewFile();
-            	}
-                _lectureIDs = loader.loadFromFile(getMainDirectory() + "/lid.xml");
-            }
-            catch (XmlPullParserException e) {
-            	Log.error("Error parsing xml content while parsing lid.xml: " +e.getMessage());
-			} catch (IOException e) {
-				Log.error("Error opening lid.xml: " +e.getMessage());
+	/**
+	 * Returns stored lecture ids.
+	 */
+	public static Collection<LectureID> getLectureIDs(Context context) {
+		SharedPreferences sharedPreferences = context.getSharedPreferences(
+				"lecture_ids", Context.MODE_PRIVATE);
+		if (sharedPreferences.contains("ids"))
+		{
+			LectureIDLoader loader = new LectureIDLoader();
+			String xml = sharedPreferences.getString("ids", "");
+			try
+			{
+				_lectureIDs = loader.loadFromString(xml);
+			} catch (XmlPullParserException e)
+			{
+				Log.error("Error parsing xml content while parsing lids: "
+						+ e.getMessage());
+			} catch (IOException e)
+			{
+				Log.error("Error opening lid.xml: " + e.getMessage());
 				return new ArrayList<LectureID>();
 			}
-        }
+		} else
+		{
+			_lectureIDs = new ArrayList<LectureID>();
+		}
 
-        return _lectureIDs;
-    }
+		return _lectureIDs;
+	}
 
-    /**
-     * Returns the Main StuReSy Directory
-     * 
-     * @return directory
-     */
-    public static File getMainDirectory()
-    {
-        return new File(MAINDIRECTORY + "");
-    }
+	/**
+	 * Stores lecture ids within androids shared preferences.
+	 * @param ids
+	 * @param context
+	 */
+	public static void storeLectureIDs(List<LectureID> ids, Context context) {
+		SharedPreferences sharedPreferences = context.getSharedPreferences(
+				"lecture_ids", Context.MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit();
+		LectureIDPersister persistor = new LectureIDPersister();
+		String xmlIDs = persistor.toXML(ids);
+		editor.putString("ids", xmlIDs);
+		editor.commit();
+	}
 
-    /**
-     * Returns the Directory where all Lectures are saved <br>
-     * <code>/Users/XYZ/maindir/lectures</code>
-     * 
-     * @return directory
-     */
-    public static File getLecturesDirectory()
-    {
-        File lecturedir = new File(MAINDIRECTORY + LECTURES_FOLDER);
-        if (!lecturedir.exists())
-        {
-            lecturedir.mkdirs();
-        }
+	/**
+	 * Returns the Main StuReSy Directory
+	 * 
+	 * @return directory
+	 */
+	public static File getMainDirectory() {
+		return new File(MAINDIRECTORY + "");
+	}
 
-        return lecturedir;
-    }
+	/**
+	 * Returns the Directory where all Lectures are saved <br>
+	 * <code>/Users/XYZ/maindir/lectures</code>
+	 * 
+	 * @return directory
+	 */
+	public static File getLecturesDirectory() {
+		File lecturedir = new File(MAINDIRECTORY + LECTURES_FOLDER);
+		if (!lecturedir.exists())
+		{
+			lecturedir.mkdirs();
+		}
 
-    /**
-     * The Pluginsdirectory located inside the Maindirectory
-     */
-    public static File getPluginsDirectory()
-    {
-        File plugdir = new File(MAINDIRECTORY + PLUGINS_FOLDER);
-        if (!plugdir.exists())
-        {
-            plugdir.mkdirs();
-        }
-        return plugdir;
-    }
+		return lecturedir;
+	}
 
-    /**
-     * The Pluginsdirectory located next to the sturesy.jar
-     */
-    public static File getInternalPluginsDirectory()
-    {
-        File plugdir = new File(Folder.getBaseFolder(), PLUGINS_FOLDER);
-        if (!plugdir.exists())
-        {
-            plugdir.mkdir();
-        }
-        return plugdir;
-    }
+	/**
+	 * The Pluginsdirectory located inside the Maindirectory
+	 */
+	public static File getPluginsDirectory() {
+		File plugdir = new File(MAINDIRECTORY + PLUGINS_FOLDER);
+		if (!plugdir.exists())
+		{
+			plugdir.mkdirs();
+		}
+		return plugdir;
+	}
 
-    public synchronized static void setMainDirectory(String path)
-    {
-        MAINDIRECTORY = new File(path);
-    }
+	/**
+	 * The Pluginsdirectory located next to the sturesy.jar
+	 */
+	public static File getInternalPluginsDirectory() {
+		File plugdir = new File(Folder.getBaseFolder(), PLUGINS_FOLDER);
+		if (!plugdir.exists())
+		{
+			plugdir.mkdir();
+		}
+		return plugdir;
+	}
+
+	public synchronized static void setMainDirectory(String path) {
+		MAINDIRECTORY = new File(path);
+	}
 
 }
