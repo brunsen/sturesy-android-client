@@ -63,8 +63,8 @@ public class QRCodeGenerator {
 		mBitmap = Bitmap.createBitmap(size, size, Config.ARGB_8888);
 		try {
 			bitMatrix = writer.encode(url, BarcodeFormat.QR_CODE, size, size);
-			for (int i = 0; i < 350; i++) {
-				for (int j = 0; j < 350; j++) {
+			for (int i = 0; i < size; i++) {
+				for (int j = 0; j < size; j++) {
 					mBitmap.setPixel(i, j, bitMatrix.get(i, j) ? Color.BLACK
 							: Color.WHITE);
 				}

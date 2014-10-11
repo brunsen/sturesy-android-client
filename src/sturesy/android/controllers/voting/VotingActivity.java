@@ -56,7 +56,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,6 +68,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.uhh.sturesy_android.R;
+
 /**
  * 
  * @author b.brunsen
@@ -74,8 +77,6 @@ import de.uhh.sturesy_android.R;
 public class VotingActivity extends Activity implements Injectable, TimeSource,
 		VotingTimeListener {
 	// TODO: Write comment for each method
-	// TODO: Fix QR-Code size and dialog, calculate size by asking android
-	// device width.
 	private boolean _isVotingRunning;
 	private QuestionSet _currentQuestionSet;
 	private int _currentQuestion;
@@ -423,22 +424,26 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	}
 
 	/**
-	 * Displays an undecorated dialogue containing a QRCode-Image with the 500 *
-	 * 500 px on the screen
+	 * Displays an undecorated dialogue containing a QRCode-Image. Width and
+	 * height are calculated using system properties.
 	 */
 	public void showQRCode(View v) {
 
-		int size = 500;
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int height = size.y;
+		int calcSize = height - 100;
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
 				v.getContext());
 		alertBuilder.setTitle(getString(R.string.QR_Code));
 
 		Bitmap icon = QRCodeGenerator.getQRImageForSavedAdress(
-				_lectureID.getLectureID(), size);
+				_lectureID.getLectureID(), calcSize);
 		ImageView imgView = new ImageView(v.getContext());
 		imgView.setImageBitmap(icon);
-		imgView.setMinimumHeight(size);
-		imgView.setMinimumWidth(size);
+		imgView.setMinimumHeight(calcSize);
+		imgView.setMinimumWidth(calcSize);
 		alertBuilder.setView(imgView);
 		alertBuilder.setCancelable(true);
 		alertBuilder.show();
