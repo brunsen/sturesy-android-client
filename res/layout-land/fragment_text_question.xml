@@ -23,6 +23,7 @@
     <LinearLayout
         android:id="@+id/question_area"
         android:layout_width="fill_parent"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/time_picker_label"
         android:orientation="horizontal" >

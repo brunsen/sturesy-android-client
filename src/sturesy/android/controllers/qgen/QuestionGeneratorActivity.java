@@ -246,6 +246,7 @@ public class QuestionGeneratorActivity extends Activity {
 						_currentQuestionset.addQuestionModel(questionModel);
 					}
 					_questionAdapter.notifyDataSetChanged();
+					checkQTIAfterImport(qtiService, questions);
 				}
 			}
 		});
@@ -513,6 +514,21 @@ public class QuestionGeneratorActivity extends Activity {
 		if (f != null)
 		{
 			_currentFile = f;
+		}
+	}
+
+	private void checkQTIAfterImport(QTIImportService qtiService,
+			QuestionSet questions) {
+		int questionSize = questions.getQuestionModels().size();
+		int qtiTotal = qtiService.getQTIQuestionSize();
+		if (questionSize < qtiTotal)
+		{
+			String message = String.format(
+					getString(R.string.error_parsing_qti), questionSize,
+					qtiTotal);
+			ErrorDialog alert = new ErrorDialog(this,
+					getString(R.string.error), message);
+			alert.show();
 		}
 	}
 }

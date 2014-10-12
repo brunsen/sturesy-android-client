@@ -48,22 +48,38 @@ import sturesy.items.SingleChoiceQuestion;
  * 
  */
 public class QTIImportService {
+	
+	private int _qtiMaxCount;
+	
+	public QTIImportService()
+	{
+		_qtiMaxCount = 0;
+	}
+	
 	/**
 	 * 
 	 * @return a QuestionSet containing Questions or <code>null</code>
-	 * @param zipFile a File object containing QTI-questions
+	 * @param zipFile
+	 *            a File object containing QTI-questions
 	 */
 	public QuestionSet getQuestions(File zipFile) {
 
-		if (zipFile != null){
+		if (zipFile != null)
+		{
 			List<Question> list = parseZipFile(zipFile);
 			return convertToQuestionSet(list);
-		} else {
+		} else
+		{
 			return null;
 		}
 
 	}
-
+	
+	public int getQTIQuestionSize()
+	{
+		return _qtiMaxCount;
+	}
+	
 	/**
 	 * Converts a List of Questions to a QuestionSet
 	 * 
@@ -74,8 +90,10 @@ public class QTIImportService {
 	private QuestionSet convertToQuestionSet(List<Question> questions) {
 		QuestionSet set = new QuestionSet();
 
-		for (Question question : questions) {
-			if (question.basetype == BaseType.IDENTIFIER) {
+		for (Question question : questions)
+		{
+			if (question.basetype == BaseType.IDENTIFIER)
+			{
 				SingleChoiceQuestion model = new SingleChoiceQuestion();
 
 				model.setQuestion(question.questiontext);
@@ -101,15 +119,18 @@ public class QTIImportService {
 		int correctAnswer = QuestionModel.NOCORRECTANSWER;
 		int currentAnswer = 0;
 
-		for (String key : question.answers.keySet()) {
+		for (String key : question.answers.keySet())
+		{
 			String answer = question.answers.get(key);
 			Double points = question.points.get(key);
-			if (points == null) {
+			if (points == null)
+			{
 				points = 0.0;
 			}
 
 			if (points > 0 && question.type != null
-					&& "single".equalsIgnoreCase(question.type)) {
+					&& "single".equalsIgnoreCase(question.type))
+			{
 				correctAnswer = currentAnswer;
 			}
 			currentAnswer++;
@@ -127,24 +148,31 @@ public class QTIImportService {
 	 */
 	private List<Question> parseZipFile(File selectedFile) {
 		ArrayList<Question> list = new ArrayList<Question>();
-		try {
+		try
+		{
 			ZipFile zipfile = new ZipFile(selectedFile);
 			Enumeration<? extends ZipEntry> zipFileEntries = zipfile.entries();
 
-			while (zipFileEntries.hasMoreElements()) {
+			while (zipFileEntries.hasMoreElements())
+			{
 				ZipEntry entry = zipFileEntries.nextElement();
 				String name = entry.getName();
 				if (name.endsWith(".xml")
-						&& !name.equalsIgnoreCase("imsmanifest.xml")) {
+						&& !name.equalsIgnoreCase("imsmanifest.xml"))
+				{
+					_qtiMaxCount++;
 					Question q = parseQuestion(zipfile, entry);
-					if (q != null) {
+					if (q != null)
+					{
 						list.add(q);
 					}
 				}
 			}
-		} catch (ZipException e) {
+		} catch (ZipException e)
+		{
 			Log.error("Zip error", e);
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			Log.error("Zip error", e);
 		}
 		return list;
@@ -154,11 +182,20 @@ public class QTIImportService {
 			throws IOException {
 		String questiontext = parseQuestionText(zipfile.getInputStream(entry));
 
-		if (questiontext != null) {
-			Question result = loadMainParts(zipfile.getInputStream(entry));
-			result.questiontext = questiontext;
-			return result;
-		} else {
+		if (questiontext != null)
+		{
+			try
+			{
+				Question result = loadMainParts(zipfile.getInputStream(entry));
+				result.questiontext = questiontext;
+				return result;
+			} catch (Exception e)
+			{
+				return null;
+			}
+
+		} else
+		{
 			return null;
 		}
 	}
@@ -167,19 +204,25 @@ public class QTIImportService {
 		StringBuffer buffer = new StringBuffer();
 
 		BufferedReader reader = null;
-		try {
+		try
+		{
 			reader = new BufferedReader(new InputStreamReader(instream));
 
 			String line = "";
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null)
+			{
 				buffer.append(line);
 			}
 			reader.close();
-		} catch (Exception e) {
-			if (reader != null) {
-				try {
+		} catch (Exception e)
+		{
+			if (reader != null)
+			{
+				try
+				{
 					reader.close();
-				} catch (IOException e1) {
+				} catch (IOException e1)
+				{
 				}
 			}
 			Log.error("reader failed", e);
@@ -198,23 +241,27 @@ public class QTIImportService {
 	private String replaceContent(String parsedString) {
 		String text = parsedString;
 
-		if (!isSingleChoiceOnly(text)) {
+		if (!isSingleChoiceOnly(text))
+		{
 			return null;
 		}
 
-		if (text.length() > 0) {
+		if (text.length() > 0)
+		{
 			final String itemBody = "itemBody";
 			int indexofBeginning = text.indexOf(itemBody) + itemBody.length();
 			int indexofEnd = text.indexOf("choiceInteraction");
 
-			if (indexofEnd < indexofBeginning) {
+			if (indexofEnd < indexofBeginning)
+			{
 				indexofEnd = text.indexOf("/itemBody");
 			}
 
 			String bodytext = text.substring(indexofBeginning + 1,
 					indexofEnd - 1).trim();
 
-			if (bodytext.contains("textEntryInteraction")) {
+			if (bodytext.contains("textEntryInteraction"))
+			{
 				bodytext = bodytext.substring(0,
 						bodytext.indexOf("<textEntryInteraction responseI"));
 			}
@@ -232,8 +279,10 @@ public class QTIImportService {
 				"<hotspotInteraction", "<matchInteraction",
 				"<orderInteraction", "<hottextInteraction" };
 
-		for (int i = 0; i < incorrectTests.length; i++) {
-			if (text.contains(incorrectTests[i])) {
+		for (int i = 0; i < incorrectTests.length; i++)
+		{
+			if (text.contains(incorrectTests[i]))
+			{
 				return false;
 			}
 		}
@@ -250,13 +299,15 @@ public class QTIImportService {
 
 	private Question loadMainParts(InputStream instream) {
 		XmlPullParserFactory factory;
-		try {
+		try
+		{
 			factory = XmlPullParserFactory.newInstance();
 			factory.setNamespaceAware(true);
 			XmlPullParser parser = factory.newPullParser();
 			parser.setInput(new InputStreamReader(instream));
 			return processXML(parser);
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		return null;
@@ -268,33 +319,50 @@ public class QTIImportService {
 		int eventType = xpp.getEventType();
 		String name = "";
 
-		do {
-			if (eventType == XmlPullParser.START_TAG) {
+		do
+		{
+			if (eventType == XmlPullParser.START_TAG)
+			{
 				name = xpp.getName();
 
-				if (name.equals("responseDeclaration")) {
+				if (name.equals("responseDeclaration"))
+				{
 					question.type = xpp.getAttributeValue(1);
 					question.basetype = BaseType.getBaseType(xpp
 							.getAttributeValue(2));
-				} else if (name.equals("mapEntry")) {
+				} else if (name.equals("mapEntry"))
+				{
 					String key = xpp.getAttributeValue(0);
 					Double value = Double.parseDouble(xpp.getAttributeValue(1)
 							.toString());
 					question.points.put(key, value);
-				} else if (name.equals("outcomeDeclaration")) {
-					if (xpp.getAttributeValue(0).toString().equals("SCORE")) {
+				} else if (name.equals("outcomeDeclaration"))
+				{
+					if (xpp.getAttributeValue(0).toString().equals("SCORE"))
+					{
 						question.outcomeScore = xpp.getAttributeValue(1);
 					}
-				} else if (name.equals("choiceInteraction")) {
+				} else if (name.equals("choiceInteraction"))
+				{
 					question.maxAnswers = findMaxChoices(xpp);
-				} else if (name.equals("simpleChoice")) {
+				} else if (name.equals("simpleChoice"))
+				{
 					String key = xpp.getAttributeValue(0);
 					String value = xpp.nextText();
 					question.answers.put(key, getEncodedString(value));
-				} else if (name.equals("correctResponse")) {
-					System.out.println(xpp.getText());
+				} else if (name.equals("correctResponse"))
+				{
+					do{
+						eventType = xpp.next();
+						name = xpp.getName();
+						if(name.equals("value")&& eventType == XmlPullParser.START_TAG)
+						{
+							System.out.println(xpp.nextText());
+						}
+					}while (eventType != XmlPullParser.END_TAG);
 				}
-			} else if (eventType == XmlPullParser.END_TAG) {
+			} else if (eventType == XmlPullParser.END_TAG)
+			{
 			}
 			eventType = xpp.next();
 		} while (eventType != XmlPullParser.END_DOCUMENT);
@@ -303,10 +371,12 @@ public class QTIImportService {
 	}
 
 	private int findMaxChoices(XmlPullParser xpp) {
-		for (int i = 0; i < xpp.getAttributeCount(); i++) {
+		for (int i = 0; i < xpp.getAttributeCount(); i++)
+		{
 			String name = xpp.getAttributeName(i);
 
-			if (name.equals("maxChoices")) {
+			if (name.equals("maxChoices"))
+			{
 				return Integer.parseInt(xpp.getAttributeValue(i));
 			}
 		}
@@ -315,9 +385,11 @@ public class QTIImportService {
 
 	private String getEncodedString(String s) {
 		String result = s;
-		try {
+		try
+		{
 			result = new String(s.getBytes(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e)
+		{
 		}
 		return result;
 	}
@@ -350,8 +422,10 @@ public class QTIImportService {
 		public double getPointsPerAnswer() {
 			double result = 0;
 
-			for (double d : points.values()) {
-				if (d > result) {
+			for (double d : points.values())
+			{
+				if (d > result)
+				{
 					result = d;
 				}
 			}
@@ -379,14 +453,16 @@ public class QTIImportService {
 		 */
 		public static BaseType getBaseType(String s) {
 			s = s.toLowerCase();
-			if (s.equals("string")) {
+			if (s.equals("string"))
+			{
 				return STRING;
-			} else if (s.equals("identifier")) {
+			} else if (s.equals("identifier"))
+			{
 				return IDENTIFIER;
-			} else {
+			} else
+			{
 				return UNKNOWN;
 			}
 		}
 	}
-
 }

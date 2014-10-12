@@ -203,12 +203,14 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 					setCurrentFile(dialog.getSelectedFile());
 					if (_currentFile != null)
 					{
+						_lecturefile = _currentFile.getAbsolutePath();
 						QTIImportService qtiService = new QTIImportService();
 						QuestionSet questions = qtiService
 								.getQuestions(_currentFile);
 						setCurrentQuestionSet(questions);
 						_votingSaver = new VotingSet();
 						setCurrentQuestionModel(0);
+						checkQTIAfterImport(qtiService, questions);
 					}
 				}
 			});
@@ -526,5 +528,20 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 
 	public void setCurrentFile(File f) {
 		_currentFile = f;
+	}
+	
+	private void checkQTIAfterImport(QTIImportService qtiService,
+			QuestionSet questions) {
+		int questionSize = questions.getQuestionModels().size();
+		int qtiTotal = qtiService.getQTIQuestionSize();
+		if (questionSize < qtiTotal)
+		{
+			String message = String.format(
+					getString(R.string.error_parsing_qti), questionSize,
+					qtiTotal);
+			ErrorDialog alert = new ErrorDialog(this,
+					getString(R.string.error), message);
+			alert.show();
+		}
 	}
 }

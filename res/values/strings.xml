@@ -58,6 +58,7 @@
     <string name="error_file_already_exist">Der angegebene Name des Fragesets konnte nicht verwendet werden. Die Fragen wurden unter dem bisherigen Namen gespeichert.</string>
     <string name="deleted">Entfernt</string>
     <string name="tap_toundo">Rückgängig</string>
+    <string name="error_parsing_qti" formatted="false">Es konnten nicht alle QTI-Fragen übernommen werden. %d von %d QTI-Fragen wurden übernommen. Unterstütze Fragetypen sind Singlechoice und Multiplechoice.</string>
 
     <!-- Voting Analysis -->
     <string name="error_csv_message">Die abgegebenen Stimmen konnten nicht in eine csv Datei gespeichert werden.</string>
