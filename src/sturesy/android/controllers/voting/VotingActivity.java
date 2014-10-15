@@ -26,7 +26,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import sturesy.android.controllers.ErrorDialog;
 import sturesy.android.controllers.FileImportDialog;
-import sturesy.android.controllers.settings.SettingsActivity;
 import sturesy.core.Log;
 import sturesy.core.backend.filter.file.NameXMLFileFilter;
 import sturesy.core.backend.filter.file.ZipFileFilter;
@@ -54,7 +53,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -127,16 +125,13 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.presentation, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_settings:
-			Intent intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
 		case R.id.load_question_set:
 			loadQuestion();
 			return true;

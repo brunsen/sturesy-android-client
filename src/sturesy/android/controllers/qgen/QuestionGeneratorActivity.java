@@ -28,7 +28,6 @@ import java.util.List;
 
 import sturesy.android.controllers.ErrorDialog;
 import sturesy.android.controllers.FileImportDialog;
-import sturesy.android.controllers.settings.SettingsActivity;
 import sturesy.core.Log;
 import sturesy.core.backend.filter.file.NameXMLFileFilter;
 import sturesy.core.backend.filter.file.ZipFileFilter;
@@ -47,7 +46,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -76,6 +74,7 @@ public class QuestionGeneratorActivity extends Activity {
 	private EditText _fileNameEdit;
 	private DynamicListView _questionListView;
 	private Fragment _currentFragment;
+
 	// required for adding questions with dialog
 	private int _questionChoice;
 	private File _qtiFile;
@@ -120,16 +119,13 @@ public class QuestionGeneratorActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.qgen, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_settings:
-			Intent intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
 		case R.id.save_question_set:
 			save();
 			return true;
