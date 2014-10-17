@@ -37,20 +37,19 @@ import sturesy.services.VotingResultCalculator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Align;
 import de.uhh.sturesy_android.R;
-// TODO: Fix chart value size.
-// TODO: Center Bars
 /**
  * 
  * @author b.brunsen
  *
  */
 public class BarChartFactory {
-	Context _context;
+	private Context _context;
+	private int _highestValue;
 
 	public BarChartFactory(Context c) {
 		_context = c;
+		_highestValue = 0;
 	}
 
 	public GraphicalView generateBar(Set<Vote> votes, QuestionModel qm,
@@ -106,22 +105,20 @@ public class BarChartFactory {
 				addSeries(votesarr, dataSet, multiRenderer, i, text, renderer);
 			}
 		}
-		multiRenderer.setXLabelsAlign(Align.CENTER);
-		multiRenderer.setShowCustomTextGrid(true);
-		multiRenderer.setBarWidth(75);
-		multiRenderer.setBarSpacing(0);
+		multiRenderer.setAxisTitleTextSize(18);
+		multiRenderer.setBarWidth(80);
+		multiRenderer.setPanEnabled(false);
+		multiRenderer.setZoomEnabled(true, true);
 		multiRenderer.setYAxisMin(0);
-		multiRenderer.setXAxisMin(-1);
+		multiRenderer.setXAxisMin(0);
+		multiRenderer.setXAxisMax(votesarr.length + 1);
+		multiRenderer.setYAxisMax(_highestValue + 1);
 		multiRenderer.setLabelsTextSize(18);
 		multiRenderer.setShowLegend(false);
-		multiRenderer.setPanEnabled(false, false);
-		multiRenderer.setShowLabels(true);
-		multiRenderer.setPointSize(5f);
 		multiRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00));
-		
 		GraphicalView barChartView = ChartFactory.getBarChartView(_context,
-				dataSet, multiRenderer, Type.DEFAULT);
-		barChartView.setMinimumHeight(550);
+				dataSet, multiRenderer, Type.STACKED);
+		barChartView.setMinimumHeight(600);
 		return barChartView;
 	}
 
@@ -129,14 +126,19 @@ public class BarChartFactory {
 			XYMultipleSeriesRenderer multiRenderer, int i, String text,
 			XYSeriesRenderer renderer) {
 		XYSeries series = new XYSeries(text);
-		series.add(i, votesarr[i]);
+		float votes = votesarr[i];
+		if(_highestValue < (int) votes)
+		{
+			_highestValue = (int) votes;
+		}
+		series.add(i+1, votes);
 		renderer.setDisplayChartValues(true);
 		renderer.setChartValuesTextAlign(Paint.Align.CENTER);
-		renderer.setChartValuesSpacing(3);
+		renderer.setChartValuesSpacing(5);
 		renderer.setChartValuesTextSize(30);
 		dataSet.addSeries(series);
 		multiRenderer.addSeriesRenderer(renderer);
-		multiRenderer.addXTextLabel(i, text);
+		multiRenderer.addXTextLabel(i+1, text);
 	}
 
 	private void tryColorMultipleChoice(QuestionModel qm, int i,
