@@ -38,7 +38,7 @@
     <string name="duration_in_seconds">Dauer in Sekunden (leer=unbegrenzt): </string>
     <string name="questions">Fragen</string>
     <string name="deselect_correct_answer">Korrekte Antwort abwählen</string>
-    <string name="new_answer"></string>
+    <string name="new_answer">Neue Antwort</string>
     <string name="add_answer">Antwort hinzufügen</string>
     <string name="up">Hoch</string>
     <string name="down">Runter</string>

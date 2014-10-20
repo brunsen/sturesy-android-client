@@ -149,6 +149,7 @@ public class SingleQuestionFragment extends Fragment implements
 				}
 			}
 		});
+		input.setInputText(_questionModel.getAnswers().get(selectedPosition));
 		input.show();
 	}
 
