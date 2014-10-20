@@ -29,7 +29,7 @@
     <string name="example_title">Mustertitel</string>
     <string name="questions_folders">Fragesätze</string>
     <string name="question_hint">Musterfrage</string>
-    <string name="new_lecture">Neue Vorlesung</string>
+    <string name="no_question_text">Es ist keine Frage ausgewählt.\n \nWählen sie eine Frage aus der Liste aus. \n\nFalls Sie noch keine Fragen angelegt haben, legen Sie eine neue Frage an, indem Sie den Knopf in der unteren linken Ecke betätigen.\n \nAlternativ können Sie auch bereits gespeicherte StuReSy Fragesätze laden. \nEs besteht ebenfalls die Möglichkeit Fragesätze im QTI-Format zu laden.</string>
     <string name="title_question_selection">Fragetyp wählen</string>
     <string name="single_choice">Einfachauswahl (Single Choice)</string>
     <string name="multiple_choice">Mehrfachauswahl (Multiple Choice)</string>

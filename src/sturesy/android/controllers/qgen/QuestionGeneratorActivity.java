@@ -110,6 +110,12 @@ public class QuestionGeneratorActivity extends Activity {
 
 		setTouchListener(_questionListView, _questionAdapter);
 		_currentQuestion = -1;
+		_currentFragment = new NoQuestionFragment();
+		FragmentTransaction transaction = getFragmentManager()
+				.beginTransaction();
+		transaction.add(R.id._question_fragment, _currentFragment,
+				"QuestionFragment");
+		transaction.commit();
 	}
 
 	private void initComponents() {
@@ -209,12 +215,7 @@ public class QuestionGeneratorActivity extends Activity {
 							if (_currentQuestion == position)
 							{
 								_currentQuestion = -1;
-								FragmentManager manager = getFragmentManager();
-								FragmentTransaction transaction = manager
-										.beginTransaction();
-								transaction.remove(_currentFragment);
-								transaction.commit();
-								_currentFragment = null;
+								replaceFragment(new NoQuestionFragment());
 							}
 							adapter.notifyDataSetChanged();
 						}
@@ -339,17 +340,16 @@ public class QuestionGeneratorActivity extends Activity {
 			qm.getAnswers().add("Antwort A");
 			qm.getAnswers().add("Antwort B");
 		}
-		_currentFragment = null;
 		if (qm instanceof SingleChoiceQuestion)
 		{
 			SingleChoiceQuestion scq = (SingleChoiceQuestion) qm;
-			_currentFragment = new SingleQuestionFragment(scq,
-					getQuestionAdapter());
+			replaceFragment(new SingleQuestionFragment(scq,
+					getQuestionAdapter()));
 		} else if (qm instanceof MultipleChoiceQuestion)
 		{
 			MultipleChoiceQuestion mcq = (MultipleChoiceQuestion) qm;
-			_currentFragment = new MultipleQuestionFragment(mcq,
-					getQuestionAdapter());
+			replaceFragment(new MultipleQuestionFragment(mcq,
+					getQuestionAdapter()));
 		} else if (qm instanceof TextQuestion)
 		{
 			TextQuestion tq = (TextQuestion) qm;
@@ -357,21 +357,10 @@ public class QuestionGeneratorActivity extends Activity {
 			{
 				tq.setAnswer("Antwort A");
 			}
-			_currentFragment = new TextQuestionFragment(tq,
-					getQuestionAdapter());
+			replaceFragment(new TextQuestionFragment(tq,
+					getQuestionAdapter()));
 		}
-		FragmentManager manager = getFragmentManager();
-		FragmentTransaction transaction = manager.beginTransaction();
-		if (manager.findFragmentByTag("QuestionFragment") == null)
-		{
-			transaction.add(R.id._question_fragment, _currentFragment,
-					"QuestionFragment");
-		} else
-		{
-			transaction.replace(R.id._question_fragment, _currentFragment,
-					"QuestionFragment");
-		}
-		transaction.commit();
+
 	}
 
 	public void save() {
@@ -526,5 +515,14 @@ public class QuestionGeneratorActivity extends Activity {
 					getString(R.string.error), message);
 			alert.show();
 		}
+	}
+
+	private void replaceFragment(Fragment fragment) {
+		_currentFragment = fragment;
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id._question_fragment, _currentFragment,
+				"QuestionFragment");
+		transaction.commit();
 	}
 }
