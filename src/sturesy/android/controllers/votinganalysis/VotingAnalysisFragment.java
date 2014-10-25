@@ -45,6 +45,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.uhh.sturesy_android.R;
+
 /**
  * 
  * @author b.brunsen
@@ -57,8 +58,7 @@ public class VotingAnalysisFragment extends Fragment {
 	private TextView _medianLabel;
 	private TextView _meanLabel;
 	private LinearLayout _graphArea;
-//	private View _barGraph;
-//	private View _lineGraph;
+
 
 	public VotingAnalysisFragment(QuestionModel qm, Set<Vote> votes) {
 		_questionModel = qm;
@@ -78,8 +78,6 @@ public class VotingAnalysisFragment extends Fragment {
 	private void initComponents(View view) {
 		_questionPanel = (TextView) view.findViewById(R.id.evaluation_question);
 		_graphArea = (LinearLayout) view.findViewById(R.id.evaluation_graphs);
-//		_barGraph = view.findViewById(R.id.evaluation_bargraph);
-//		_lineGraph = view.findViewById(R.id.evalutation_line_graph);
 		_medianLabel = (TextView) view.findViewById(R.id.evaluation_median);
 		_meanLabel = (TextView) view.findViewById(R.id.evaluation_mean);
 	}
@@ -94,11 +92,10 @@ public class VotingAnalysisFragment extends Fragment {
 		setTimeChart(_votesToDisplay);
 	}
 
-	/**:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:orientation="horizontal" />
-	 * Updates the bar chart.
+	/**
+	 * :layout_width="fill_parent" android:layout_height="wrap_content"
+	 * android:layout_weight="1" android:orientation="horizontal" /> Updates the
+	 * bar chart.
 	 * 
 	 * @param qm
 	 * @param results
@@ -106,123 +103,10 @@ public class VotingAnalysisFragment extends Fragment {
 	 */
 	private void setBars(QuestionModel qm, Set<Vote> results) {
 		BarChartFactory factory = new BarChartFactory(getActivity());
-		GraphicalView barChartView = factory.generateBar(_votesToDisplay, _questionModel, false);
+		GraphicalView barChartView = factory.generateBar(_votesToDisplay,
+				_questionModel, false);
 		_graphArea.addView(barChartView);
-		// _barGraph.clear();
-		// if (!(qm instanceof TextQuestion))
-		// {
-		// for (int i = 0; i < votesarr.length; i++)
-		// {
-		// String text = "" + (char) ('A' + i);
-		// SimpleXYSeries series = new SimpleXYSeries(text);
-		// series.addLast(i, votesarr[i]);
-		// BarFormatter seriesFormat = new BarFormatter(
-		// Color.parseColor("#FFCC11"),
-		// Color.parseColor("#FFCC11"));
-		// _barGraph.addSeries(series, seriesFormat);
-		// }
-		// } else
-		// {
-		// // Loop over votes array and init exactly two bars to display
-		// // (correct and others)
-		// for (int i = 0; i < votesarr.length; i++)
-		// {
-		// String text = "";
-		// if (i == 0)
-		// {
-		// text += ((TextQuestion) qm).getAnswer();
-		// } else
-		// {
-		// text += getString(R.string.others);
-		// }
-		// SimpleXYSeries series = new SimpleXYSeries(text);
-		// series.addLast(i, votesarr[i]);
-		// BarFormatter seriesFormat = new BarFormatter(
-		// Color.parseColor("#FFCC11"),
-		// Color.parseColor("#FFCC11"));
-		// _barGraph.addSeries(series, seriesFormat);
-		// }
-		// }
-		// _barGraph.setTicksPerRangeLabel(3);
-		// BarRenderer<BarFormatter> renderer = (BarRenderer<BarFormatter>)
-		// _barGraph.getRenderer(BarRenderer.class);
-		// renderer.setBarRenderStyle(BarRenderStyle.SIDE_BY_SIDE);
-		// renderer.setBarWidthStyle(BarWidthStyle.FIXED_WIDTH);
-		// renderer.setBarWidth(5);
-		// renderer.setBarGap(5);
-		// _barGraph.redraw();
-		// ArrayList<Bar> bars = new ArrayList<Bar>();
-		// fillBars(qm, results, answers, bars);
-		// _barGraph.setBars(bars);
 	}
-
-	/**
-	 * Helper method for set bars. This method is for processing of voting data.
-	 * 
-	 * @param qm
-	 * @param results
-	 * @param answers
-	 * @param bars
-	 */
-	// private void fillBars(QuestionModel qm, Set<Vote> results,
-	// List<String> answers, List<Bar> bar_barGraph.clear();
-	// if (!(qm instanceof TextQuestion))
-	// {
-	// for (int i = 0; i < votesarr.length; i++)
-	// {
-	// String text = "" + (char) ('A' + i);
-	// SimpleXYSeries series = new SimpleXYSeries(text);
-	// series.addLast(i, votesarr[i]);
-	// BarFormatter seriesFormat = new BarFormatter(
-	// Color.parseColor("#FFCC11"),
-	// Color.parseColor("#FFCC11"));
-	// _barGraph.addSeries(series, seriesFormat);
-	// }
-	// } else
-	// {
-	// // Loop over votes array and init exactly two bars to display
-	// // (correct and others)
-	// for (int i = 0; i < votesarr.length; i++)
-	// {
-	// String text = "";
-	// if (i == 0)
-	// {
-	// text += ((TextQuestion) qm).getAnswer();
-	// } else
-	// {
-	// text += getString(R.string.others);
-	// }
-	// SimpleXYSeries series = new SimpleXYSeries(text);
-	// series.addLast(i, votesarr[i]);
-	// BarFormatter seriesFormat = new BarFormatter(
-	// Color.parseColor("#FFCC11"),
-	// Color.parseColor("#FFCC11"));
-	// _barGraph.addSeries(series, seriesFormat);
-	// }
-	// }
-	// _barGraph.setTicksPerRangeLabel(3);
-	// BarRenderer<BarFormatter> renderer = (BarRenderer<BarFormatter>)
-	// _barGraph.getRenderer(BarRenderer.class);
-	// renderer.setBarRenderStyle(BarRenderStyle.SIDE_BY_SIDE);
-	// renderer.setBarWidthStyle(BarWidthStyle.FIXED_WIDTH);
-	// renderer.setBarWidth(5);
-	// renderer.setBarGap(5);
-	// _barGraph.redraw();s) {
-	//
-	// VotingResultCalculator vrc = new VotingResultCalculator();
-	// float[] votesarr = vrc.calculateVotes(qm, results);
-	// for (int i = 0; i < votesarr.length; i++)
-	// {
-	// Bar bar = new Bar();
-	// String text = "" + (char) ('A' + i);
-	//
-	// bar.setColor(Color.parseColor("#FFCC11"));
-	//
-	// bar.setName(text);
-	// bar.setValue(votesarr[i]);
-	// bars.add(bar);
-	// }
-	// }
 
 	private void setTimeChart(Set<Vote> votes) {
 		if (votes.size() != 0)
@@ -237,8 +121,8 @@ public class VotingAnalysisFragment extends Fragment {
 			renderer.setPointStyle(PointStyle.CIRCLE);
 			renderer.setPointStrokeWidth(3);
 			renderer.setFillPoints(true);
-//			renderer.setFillBelowLine(true);
-//			renderer.setFillBelowLineColor(Color.parseColor("#FF9912"));
+			// renderer.setFillBelowLine(true);
+			// renderer.setFillBelowLineColor(Color.parseColor("#FF9912"));
 			XYSeries series = new XYSeries("Votes");
 			for (int i = 0; i < dubble.length; i++)
 			{
@@ -247,20 +131,22 @@ public class VotingAnalysisFragment extends Fragment {
 			XYMultipleSeriesDataset dataSet = new XYMultipleSeriesDataset();
 			dataSet.addSeries(series);
 
-			XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
-			mRenderer.setAxisTitleTextSize(18);
-			mRenderer.setChartTitleTextSize(18);
-			mRenderer.setXTitle(getString(R.string.time_in_seconds));
-			mRenderer.setYTitle(getString(R.string.number_of_votes));
+			XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
+			multiRenderer.setAxisTitleTextSize(18);
+			multiRenderer.setChartTitleTextSize(18);
+			multiRenderer.setLabelsTextSize(18);
+			multiRenderer.setXTitle(getString(R.string.time_in_seconds));
+			multiRenderer.setYTitle(getString(R.string.number_of_votes));
 			// Avoid black border
-			mRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00)); // transparent margins
+			multiRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00)); // transparent
+																				// margins
 			// Disable Pan on two axis
-			mRenderer.setPanEnabled(false, false);
-			mRenderer.setYAxisMin(0);
-			mRenderer.setLegendTextSize(18);
-			mRenderer.addSeriesRenderer(renderer);
+			multiRenderer.setPanEnabled(false, false);
+			multiRenderer.setYAxisMin(0);
+			multiRenderer.setLegendTextSize(18);
+			multiRenderer.addSeriesRenderer(renderer);
 			GraphicalView lineChartView = ChartFactory.getLineChartView(
-					getActivity(), dataSet, mRenderer);
+					getActivity(), dataSet, multiRenderer);
 			lineChartView.setMinimumHeight(550);
 			_graphArea.addView(lineChartView);
 		}
@@ -334,7 +220,7 @@ public class VotingAnalysisFragment extends Fragment {
 		_graphArea.removeAllViews();
 		setData();
 	}
-	
+
 	public void updateQuestion(QuestionModel qm) {
 		_questionModel = qm;
 		_votesToDisplay = new HashSet<Vote>();

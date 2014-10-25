@@ -28,7 +28,6 @@ import sturesy.android.controllers.ErrorDialog;
 import sturesy.android.controllers.FileImportDialog;
 import sturesy.core.Log;
 import sturesy.core.backend.filter.file.NameXMLFileFilter;
-import sturesy.core.backend.filter.file.ZipFileFilter;
 import sturesy.core.plugin.Injectable;
 import sturesy.core.plugin.QuestionVoteMatcher;
 import sturesy.items.LectureID;
@@ -36,7 +35,6 @@ import sturesy.items.QuestionModel;
 import sturesy.items.QuestionSet;
 import sturesy.items.Vote;
 import sturesy.items.VotingSet;
-import sturesy.services.QTIImportService;
 import sturesy.services.TechnicalVotingService;
 import sturesy.services.TechnicalVotingServiceImpl;
 import sturesy.services.TimeSource;
@@ -74,7 +72,7 @@ import de.uhh.sturesy_android.R;
  */
 public class VotingActivity extends Activity implements Injectable, TimeSource,
 		VotingTimeListener {
-	// TODO: Write comment for each method
+
 	private boolean _isVotingRunning;
 	private QuestionSet _currentQuestionSet;
 	private int _currentQuestion;
@@ -135,14 +133,14 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		case R.id.load_question_set:
 			loadQuestion();
 			return true;
-		case R.id.import_QTI:
-			importQTI();
-			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	/**
+	 * Saves voting results to a file and closes activity.
+	 */
 	@Override
 	protected void onDestroy() {
 		if (_isVotingRunning)
@@ -165,6 +163,10 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		super.onDestroy();
 	}
 
+	/**
+	 * Displays a dialog to select question sets for voting. Loads selected
+	 * question set and sets UI to display values.
+	 */
 	private void loadQuestion() {
 		if (!_isVotingRunning)
 		{
@@ -179,33 +181,6 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 					if (_currentFile != null)
 					{
 						readFile(_currentFile);
-					}
-				}
-			});
-			dialog.show();
-		}
-	}
-
-	private void importQTI() {
-		if (!_isVotingRunning)
-		{
-			String title = getString(R.string.title_open_qti);
-			final FileImportDialog dialog = new FileImportDialog(this,
-					new ZipFileFilter(), title);
-			dialog.setOnDismissListener(new OnDismissListener() {
-				@Override
-				public void onDismiss(DialogInterface dialog2) {
-					setCurrentFile(dialog.getSelectedFile());
-					if (_currentFile != null)
-					{
-						_lecturefile = _currentFile.getAbsolutePath();
-						QTIImportService qtiService = new QTIImportService();
-						QuestionSet questions = qtiService
-								.getQuestions(_currentFile);
-						setCurrentQuestionSet(questions);
-						_votingSaver = new VotingSet();
-						setCurrentQuestionModel(0);
-						checkQTIAfterImport(qtiService, questions);
 					}
 				}
 			});
@@ -291,6 +266,10 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		}
 	}
 
+	/**
+	 * Method to handle vote injections. Stores votes from a background service
+	 * inside member variable and triggers UI update.
+	 */
 	@Override
 	public void injectVote(final Vote vote) {
 		runOnUiThread(new Runnable() {
@@ -315,6 +294,13 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		});
 	}
 
+	/**
+	 * Sets the current questionset and triggers UI changes to reflect current
+	 * question.
+	 * 
+	 * @param currentQuestionSet
+	 * @param currentQuestion
+	 */
 	private void setCurrentQuestionModel(QuestionSet currentQuestionSet,
 			int currentQuestion) {
 		QuestionModel model = currentQuestionSet.getIndex(currentQuestion);
@@ -523,20 +509,5 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 
 	public void setCurrentFile(File f) {
 		_currentFile = f;
-	}
-	
-	private void checkQTIAfterImport(QTIImportService qtiService,
-			QuestionSet questions) {
-		int questionSize = questions.getQuestionModels().size();
-		int qtiTotal = qtiService.getQTIQuestionSize();
-		if (questionSize < qtiTotal)
-		{
-			String message = String.format(
-					getString(R.string.error_parsing_qti), questionSize,
-					qtiTotal);
-			ErrorDialog alert = new ErrorDialog(this,
-					getString(R.string.error), message);
-			alert.show();
-		}
 	}
 }

@@ -34,9 +34,10 @@ import sturesy.items.SingleChoiceQuestion;
 import sturesy.items.TextQuestion;
 import sturesy.items.Vote;
 import sturesy.services.VotingResultCalculator;
+import sturesy.util.MathUtils;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import de.uhh.sturesy_android.R;
 /**
  * 
@@ -45,11 +46,9 @@ import de.uhh.sturesy_android.R;
  */
 public class BarChartFactory {
 	private Context _context;
-	private int _highestValue;
 
 	public BarChartFactory(Context c) {
 		_context = c;
-		_highestValue = 0;
 	}
 
 	public GraphicalView generateBar(Set<Vote> votes, QuestionModel qm,
@@ -59,8 +58,17 @@ public class BarChartFactory {
 		XYMultipleSeriesDataset dataSet = new XYMultipleSeriesDataset();
 		XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
 		multiRenderer.setXLabels(0);
+		
+		int max = 0;
+        for (int i = 0; i < votesarr.length; i++)
+        {
+            max += votesarr[i];
+        }
+		
 		if (!(qm instanceof TextQuestion))
 		{
+			
+			
 			for (int i = 0; i < votesarr.length; i++)
 			{
 				String text = "" + (char) ('A' + i);
@@ -73,7 +81,7 @@ public class BarChartFactory {
 				else{
 					renderer.setColor(Color.parseColor("#FFCC11"));
 				}
-				addSeries(votesarr, dataSet, multiRenderer, i, text, renderer);
+				addSeries(votesarr,max , dataSet, multiRenderer, i, text, renderer);
 			}
 		} else
 		{
@@ -102,9 +110,11 @@ public class BarChartFactory {
 				{
 					renderer.setColor(Color.parseColor("#FFCC11"));
 				}
-				addSeries(votesarr, dataSet, multiRenderer, i, text, renderer);
+				addSeries(votesarr, max, dataSet, multiRenderer, i, text, renderer);
 			}
 		}
+		multiRenderer.setYTitle(_context.getString(R.string.votes_in_percent));
+		multiRenderer.setYLabelsAlign(Align.LEFT);
 		multiRenderer.setAxisTitleTextSize(18);
 		multiRenderer.setBarWidth(80);
 		multiRenderer.setPanEnabled(false);
@@ -112,7 +122,7 @@ public class BarChartFactory {
 		multiRenderer.setYAxisMin(0);
 		multiRenderer.setXAxisMin(0);
 		multiRenderer.setXAxisMax(votesarr.length + 1);
-		multiRenderer.setYAxisMax(_highestValue + 1);
+		multiRenderer.setYAxisMax(100);
 		multiRenderer.setLabelsTextSize(18);
 		multiRenderer.setShowLegend(false);
 		multiRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00));
@@ -122,20 +132,18 @@ public class BarChartFactory {
 		return barChartView;
 	}
 
-	private void addSeries(float[] votesarr, XYMultipleSeriesDataset dataSet,
+	private void addSeries(float[] votesarr, int max, XYMultipleSeriesDataset dataSet,
 			XYMultipleSeriesRenderer multiRenderer, int i, String text,
 			XYSeriesRenderer renderer) {
 		XYSeries series = new XYSeries(text);
-		float votes = votesarr[i];
-		if(_highestValue < (int) votes)
-		{
-			_highestValue = (int) votes;
-		}
-		series.add(i+1, votes);
+		
+		// Calculate the value in percent
+		float votes = votesarr[i] * 100 / max;
+        votes = (float) MathUtils.roundToDecimals(votes, 1);
+		
+        series.add(i+1, votes);
 		renderer.setDisplayChartValues(true);
-		renderer.setChartValuesTextAlign(Paint.Align.CENTER);
-		renderer.setChartValuesSpacing(5);
-		renderer.setChartValuesTextSize(30);
+		renderer.setChartValuesTextSize(20);
 		dataSet.addSeries(series);
 		multiRenderer.addSeriesRenderer(renderer);
 		multiRenderer.addXTextLabel(i+1, text);

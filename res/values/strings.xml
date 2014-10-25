@@ -64,9 +64,10 @@
     <string name="error_csv_message">Die abgegebenen Stimmen konnten nicht in eine csv Datei gespeichert werden.</string>
     <string name="error_reading_votes_from_file">Die Abstimmungsergebnisse konnten nicht geladen werden.
         Grund hier für sind Fehler in der XML-Datei.</string>
-    <string name="csv_export">C SV Export</string>
+    <string name="csv_export">CSV Export</string>
     <string name="open_results">Ergebnisse laden</string>
     <string name="number_of_votes">Anzahl an Stimmen</string>
+    <string name="votes_in_percent">Stimmen in %</string>
     <string name="votes_over_time">Stimmen pro Zeit</string>
     <string name="time_in_seconds">Zeit in Sekunden</string>
     <string name="mean">Mittelwert: %f Sekunden</string>
