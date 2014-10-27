@@ -1,5 +1,40 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item 
+        android:id="@+id/barcodeButton"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/barcode"
+        android:title="@string/voting_barcode_tip"
+        />
+    <item 
+        android:id="@+id/startVotingButton"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/play"
+        android:title="@string/voting_start_voting_tip"
+        />
+    <item 
+        android:id="@+id/resetVotes"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/undo"
+        android:title="@string/voting_reset_tip"
+        />
+    <item 
+        android:id="@+id/correctResultButton"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/bar_yellow"
+        android:title="@string/voting_show_correct_tip"
+        />
+    <item 
+        android:id="@+id/resultButton"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/evaluate"
+        android:title="@string/voting_show_results_tip"
+        />
     <item
         android:id="@+id/load_question_set"
         android:orderInCategory="100"

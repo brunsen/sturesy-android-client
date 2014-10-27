@@ -23,6 +23,11 @@
     <string name="reset_voting_toast">Die Abstimmung wurde für die aktuelle Frage zurückgesetzt</string>
     <string name="voting_started_toast">Die Abstimmung wurde gestartet</string>
     <string name="voting_finished_toast">Die Abstimmung wurde beendet</string>
+    <string name="voting_start_voting_tip">Startet oder stoppt die derzeitige Abstimmung</string>
+    <string name="voting_barcode_tip">Zeigt einen QR-Code, der die URL für diese Abstimmung beinhaltet</string>
+    <string name="voting_reset_tip">Löscht alle bisherigen Stimmen zu dieser Frage</string>
+    <string name="voting_show_results_tip">Zeigt oder verbirgt ein Balkendiagramm</string>
+    <string name="voting_show_correct_tip">Zeigt oder verbirgt die richtige Antwort</string>
 
     <!-- Question Generator -->
     <string name="name_of_question_set">Name des Fragensatzes</string>

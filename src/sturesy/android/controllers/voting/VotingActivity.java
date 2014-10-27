@@ -59,7 +59,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,8 +86,8 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	private Fragment _currentFragment;
 	private TextView _votingpanel;
 	private TextView _lectureIDPanel;
-	private ImageButton _startButton;
 	private TextView _progressTextView;
+	private MenuItem _startButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +113,6 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 
 	private void initComponents() {
 		_timeField = (EditText) findViewById(R.id.time);
-		_startButton = (ImageButton) findViewById(R.id.startVotingButton);
 		_isVotingRunning = false;
 		_lectureIDPanel = (TextView) findViewById(R.id.voting_lectureID);
 		_votingpanel = (TextView) findViewById(R.id.voting_votes);
@@ -124,6 +122,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.presentation, menu);
+		_startButton = menu.findItem(R.id.startVotingButton);
 		return true;
 	}
 
@@ -132,6 +131,21 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		switch (item.getItemId()) {
 		case R.id.load_question_set:
 			loadQuestion();
+			return true;
+		case R.id.barcodeButton:
+			showQRCode();
+			return true;
+		case R.id.startVotingButton:
+			startStopVoting();
+			return true;
+		case R.id.resetVotes:
+			resetVoting();
+			return true;
+		case R.id.correctResultButton:
+			showCorrectResult();
+			return true;
+		case R.id.resultButton:
+			showResults();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -226,7 +240,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	/**
 	 * Starts the voting.
 	 */
-	public void startStopVoting(View v) {
+	public void startStopVoting() {
 		if (!_lecturefile.equals(""))
 		{
 			if (_isVotingRunning)
@@ -245,7 +259,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	 * @param The
 	 *            view that was clicked (voting button)
 	 */
-	public void resetVoting(View v) {
+	public void resetVoting() {
 		if (!_lecturefile.equals("")
 				&& _currentFragment instanceof VotingDataFragment)
 		{
@@ -374,7 +388,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	@Override
 	public void startedVoting() {
 		_isVotingRunning = true;
-		_startButton.setImageResource(R.drawable.stop);
+		_startButton.setIcon(R.drawable.stop);
 		String toastMessage = getString(R.string.voting_started_toast);
 		Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
 	}
@@ -386,7 +400,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 			@Override
 			public void run() {
 				_isVotingRunning = false;
-				_startButton.setImageResource(R.drawable.play);
+				_startButton.setIcon(R.drawable.play);
 				String toastMessage = getString(R.string.voting_finished_toast);
 				Toast.makeText(getApplicationContext(), toastMessage,
 						Toast.LENGTH_SHORT).show();
@@ -410,7 +424,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	 * Displays an undecorated dialogue containing a QRCode-Image. Width and
 	 * height are calculated using system properties.
 	 */
-	public void showQRCode(View v) {
+	public void showQRCode() {
 
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
@@ -418,12 +432,12 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		int height = size.y;
 		int calcSize = height - 100;
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
-				v.getContext());
+				this);
 		alertBuilder.setTitle(getString(R.string.QR_Code));
 
 		Bitmap icon = QRCodeGenerator.getQRImageForSavedAdress(
 				_lectureID.getLectureID(), calcSize);
-		ImageView imgView = new ImageView(v.getContext());
+		ImageView imgView = new ImageView(this);
 		imgView.setImageBitmap(icon);
 		imgView.setMinimumHeight(calcSize);
 		imgView.setMinimumWidth(calcSize);
@@ -435,7 +449,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	/**
 	 * opens a result activity fitting the latest voting.
 	 */
-	public void showResults(View v) {
+	public void showResults() {
 		if (_currentFragment instanceof VotingDataFragment
 				&& _votingSaver != null)
 		{
@@ -457,13 +471,11 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 
 	/**
 	 * Shows the correct answer after a finished voting.
-	 * 
-	 * @param v
 	 */
-	public void showCorrectResult(View v) {
+	public void showCorrectResult() {
 		if (_currentFragment instanceof VotingResulstFragment)
 		{
-			((VotingResulstFragment) _currentFragment).swapAnswerBars(v);
+			((VotingResulstFragment) _currentFragment).swapAnswerBars();
 		}
 	}
 

@@ -11,9 +11,10 @@
     tools:context=".VotingActivity" >
 
     <LinearLayout
-        android:id="@+id/votingButtonArea"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:id="@+id/votingTimeArea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:orientation="horizontal" >
 
         <TextView
@@ -29,57 +30,22 @@
             android:layout_gravity="bottom"
             android:inputType="number"
             android:minWidth="50dp" />
+    </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/barcodeButton"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:onClick="showQRCode"
-            android:scaleType="fitCenter"
-            android:src="@drawable/barcode" />
-
-        <ImageButton
-            android:id="@+id/startVotingButton"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:onClick="startStopVoting"
-            android:scaleType="fitCenter"
-            android:src="@drawable/play" />
-
-        <ImageButton
-            android:id="@+id/resetVotes"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:onClick="resetVoting"
-            android:scaleType="fitCenter"
-            android:src="@drawable/undo" />
-
-        <ImageButton
-            android:id="@+id/correctResultButton"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:onClick="showCorrectResult"
-            android:scaleType="fitCenter"
-            android:src="@drawable/bar_yellow" />
-
-        <ImageButton
-            android:id="@+id/resultButton"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:onClick="showResults"
-            android:scaleType="fitCenter"
-            android:src="@drawable/evaluate" />
+    <LinearLayout
+        android:id="@+id/votingButtonArea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal" >
 
         <ImageButton
             android:id="@+id/previousButton"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
             android:onClick="previousVoting"
             android:scaleType="fitCenter"
             android:src="@drawable/previous" />
@@ -87,13 +53,16 @@
         <TextView
             android:id="@+id/questionNumber"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
 
         <ImageButton
             android:id="@+id/nextButton"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
             android:onClick="nextVoting"
             android:scaleType="fitCenter"
             android:src="@drawable/next" />
@@ -102,7 +71,7 @@
     <LinearLayout
         android:id="@+id/fragmentArea"
         android:layout_width="fill_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
         android:layout_below="@id/votingButtonArea"
         android:baselineAligned="false"
         android:orientation="horizontal" >
@@ -118,6 +87,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_below="@id/fragmentArea"
         android:orientation="horizontal" >
 
@@ -132,8 +102,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|bottom"
-            android:layout_marginLeft="300dp" 
-            android:layout_marginStart="300dp"/>
+            android:layout_marginLeft="300dp"
+            android:layout_marginStart="300dp" />
     </LinearLayout>
 
 </RelativeLayout>

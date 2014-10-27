@@ -16,6 +16,7 @@
             android:id="@+id/evaluation_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:onClick="previousButtonAction"
             android:src="@drawable/previous" />
 
@@ -29,14 +30,15 @@
             android:id="@+id/evaluation_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:onClick="nextButtonAction"
             android:src="@drawable/next" />
     </LinearLayout>
 
-    <FrameLayout 
+    <FrameLayout
         android:id="@+id/voting_analysis_fragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

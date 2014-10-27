@@ -72,10 +72,9 @@ public class VotingResulstFragment extends Fragment {
 	/**
 	 * Clears bar chart and replaces old bar chart with new one.
 	 * Switches display of correct answer.
-	 * @param v
 	 */
 	
-	public void swapAnswerBars(View v) {
+	public void swapAnswerBars() {
 		_graphArea.removeAllViews();
 		GraphicalView barChartView;
 		BarChartFactory factory = new BarChartFactory(getActivity());
