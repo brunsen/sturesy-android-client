@@ -138,8 +138,8 @@ public class BarChartFactory {
 		XYSeries series = new XYSeries(text);
 		
 		// Calculate the value in percent
-		float votes = votesarr[i] * 100 / max;
-        votes = (float) MathUtils.roundToDecimals(votes, 1);
+		double votes = votesarr[i] * 100 / max;
+        votes = MathUtils.roundToDecimals(votes, 2);
 		
         series.add(i+1, votes);
 		renderer.setDisplayChartValues(true);
