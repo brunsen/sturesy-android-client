@@ -133,7 +133,10 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 			loadQuestion();
 			return true;
 		case R.id.barcodeButton:
-			showQRCode();
+			if(_lectureID != null)
+			{
+				showQRCode();
+			}
 			return true;
 		case R.id.startVotingButton:
 			startStopVoting();
@@ -170,8 +173,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 				votingService.createAndUpdateVoting(_votingSaver, _lecturefile);
 			} catch (IOException e)
 			{
-				// TODO: Find suitable error handling
-				e.printStackTrace();
+				Log.error(e.getMessage(), e.getCause());
 			}
 		}
 		super.onDestroy();
@@ -425,7 +427,6 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	 * height are calculated using system properties.
 	 */
 	public void showQRCode() {
-
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
