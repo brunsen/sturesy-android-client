@@ -115,7 +115,7 @@ public class BarChartFactory {
 		}
 		multiRenderer.setYTitle(_context.getString(R.string.votes_in_percent));
 		multiRenderer.setYLabelsAlign(Align.LEFT);
-		multiRenderer.setAxisTitleTextSize(18);
+		multiRenderer.setAxisTitleTextSize(22);
 		multiRenderer.setBarWidth(80);
 		multiRenderer.setPanEnabled(false);
 		multiRenderer.setZoomEnabled(true, true);
@@ -123,7 +123,7 @@ public class BarChartFactory {
 		multiRenderer.setXAxisMin(0);
 		multiRenderer.setXAxisMax(votesarr.length + 1);
 		multiRenderer.setYAxisMax(100);
-		multiRenderer.setLabelsTextSize(18);
+		multiRenderer.setLabelsTextSize(22);
 		multiRenderer.setShowLegend(false);
 		multiRenderer.setMarginsColor(Color.argb(0x00, 0xff, 0x00, 0x00));
 		GraphicalView barChartView = ChartFactory.getBarChartView(_context,
@@ -143,7 +143,7 @@ public class BarChartFactory {
 		
         series.add(i+1, votes);
 		renderer.setDisplayChartValues(true);
-		renderer.setChartValuesTextSize(20);
+		renderer.setChartValuesTextSize(22);
 		dataSet.addSeries(series);
 		multiRenderer.addSeriesRenderer(renderer);
 		multiRenderer.addXTextLabel(i+1, text);

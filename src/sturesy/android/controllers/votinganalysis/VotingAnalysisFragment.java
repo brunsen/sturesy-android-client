@@ -37,6 +37,7 @@ import sturesy.util.HTMLLabel;
 import sturesy.util.VoteAverage;
 import android.app.Fragment;
 import android.graphics.Color;
+import android.graphics.Paint.Align;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -132,9 +133,10 @@ public class VotingAnalysisFragment extends Fragment {
 			dataSet.addSeries(series);
 
 			XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
-			multiRenderer.setAxisTitleTextSize(18);
-			multiRenderer.setChartTitleTextSize(18);
-			multiRenderer.setLabelsTextSize(18);
+			multiRenderer.setAxisTitleTextSize(22);
+			multiRenderer.setChartTitleTextSize(22);
+			multiRenderer.setLabelsTextSize(22);
+			multiRenderer.setYLabelsAlign(Align.LEFT);
 			multiRenderer.setXTitle(getString(R.string.time_in_seconds));
 			multiRenderer.setYTitle(getString(R.string.number_of_votes));
 			// Avoid black border
@@ -143,7 +145,7 @@ public class VotingAnalysisFragment extends Fragment {
 			// Disable Pan on two axis
 			multiRenderer.setPanEnabled(false, false);
 			multiRenderer.setYAxisMin(0);
-			multiRenderer.setLegendTextSize(18);
+			multiRenderer.setLegendTextSize(22);
 			multiRenderer.addSeriesRenderer(renderer);
 			GraphicalView lineChartView = ChartFactory.getLineChartView(
 					getActivity(), dataSet, multiRenderer);
