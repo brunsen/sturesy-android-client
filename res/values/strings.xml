@@ -23,13 +23,18 @@
     <string name="reset_voting_toast">Die Abstimmung wurde für die aktuelle Frage zurückgesetzt</string>
     <string name="voting_started_toast">Die Abstimmung wurde gestartet</string>
     <string name="voting_finished_toast">Die Abstimmung wurde beendet</string>
+    <string name="voting_start_voting_tip">Startet oder stoppt die derzeitige Abstimmung</string>
+    <string name="voting_barcode_tip">Zeigt einen QR-Code, der die URL für diese Abstimmung beinhaltet</string>
+    <string name="voting_reset_tip">Löscht alle bisherigen Stimmen zu dieser Frage</string>
+    <string name="voting_show_results_tip">Zeigt oder verbirgt ein Balkendiagramm</string>
+    <string name="voting_show_correct_tip">Zeigt oder verbirgt die richtige Antwort</string>
 
     <!-- Question Generator -->
     <string name="name_of_question_set">Name des Fragensatzes</string>
     <string name="example_title">Mustertitel</string>
     <string name="questions_folders">Fragesätze</string>
     <string name="question_hint">Musterfrage</string>
-    <string name="new_lecture">Neue Vorlesung</string>
+    <string name="no_question_text">Es ist keine Frage ausgewählt.\n \nWählen sie eine Frage aus der Liste aus. \n\nFalls Sie noch keine Fragen angelegt haben, legen Sie eine neue Frage an, indem Sie den Knopf in der unteren linken Ecke betätigen.\n \nAlternativ können Sie auch bereits gespeicherte StuReSy Fragesätze laden. \nEs besteht ebenfalls die Möglichkeit Fragesätze im QTI-Format zu laden.</string>
     <string name="title_question_selection">Fragetyp wählen</string>
     <string name="single_choice">Einfachauswahl (Single Choice)</string>
     <string name="multiple_choice">Mehrfachauswahl (Multiple Choice)</string>
@@ -38,7 +43,7 @@
     <string name="duration_in_seconds">Dauer in Sekunden (leer=unbegrenzt): </string>
     <string name="questions">Fragen</string>
     <string name="deselect_correct_answer">Korrekte Antwort abwählen</string>
-    <string name="new_answer"></string>
+    <string name="new_answer">Neue Antwort</string>
     <string name="add_answer">Antwort hinzufügen</string>
     <string name="up">Hoch</string>
     <string name="down">Runter</string>
@@ -58,14 +63,16 @@
     <string name="error_file_already_exist">Der angegebene Name des Fragesets konnte nicht verwendet werden. Die Fragen wurden unter dem bisherigen Namen gespeichert.</string>
     <string name="deleted">Entfernt</string>
     <string name="tap_toundo">Rückgängig</string>
+    <string name="error_parsing_qti" formatted="false">Es konnten nicht alle QTI-Fragen übernommen werden. %d von %d QTI-Fragen wurden übernommen. Unterstütze Fragetypen sind Singlechoice und Multiplechoice.</string>
 
     <!-- Voting Analysis -->
     <string name="error_csv_message">Die abgegebenen Stimmen konnten nicht in eine csv Datei gespeichert werden.</string>
     <string name="error_reading_votes_from_file">Die Abstimmungsergebnisse konnten nicht geladen werden.
         Grund hier für sind Fehler in der XML-Datei.</string>
-    <string name="csv_export">C SV Export</string>
+    <string name="csv_export">CSV Export</string>
     <string name="open_results">Ergebnisse laden</string>
     <string name="number_of_votes">Anzahl an Stimmen</string>
+    <string name="votes_in_percent">Stimmen in %</string>
     <string name="votes_over_time">Stimmen pro Zeit</string>
     <string name="time_in_seconds">Zeit in Sekunden</string>
     <string name="mean">Mittelwert: %f Sekunden</string>

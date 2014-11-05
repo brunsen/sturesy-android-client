@@ -32,6 +32,7 @@ public class Startup
     {
         loadSettings();
         loadPlugins();
+        SturesyManager.getLecturesDirectory();
     }
 
     private static void loadSettings()

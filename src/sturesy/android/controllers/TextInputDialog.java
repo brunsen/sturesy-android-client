@@ -57,10 +57,15 @@ public class TextInputDialog extends Dialog implements OnClickListener{
 		return text;
 	}
 
-	private void setText(String text) {
+	public void setText(String text) {
 		this.text = text;
 	}
 
+	public void setInputText(String text)
+	{
+		_inputText.setText(text);
+	}
+	
 	public boolean is_validText() {
 		return _validText;
 	}

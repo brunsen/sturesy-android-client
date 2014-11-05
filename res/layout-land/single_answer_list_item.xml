@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:descendantFocusability="blocksDescendants" >
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/AnswerText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="6" />
+        android:layout_weight="6"
+        android:singleLine="true" />
 
     <RadioButton
         android:id="@+id/correct_anwer_radio"
@@ -17,14 +18,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:focusable="false" />
-	<ImageButton
+
+    <ImageButton
         android:id="@+id/answerUp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:focusable="false"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/up"
+        android:focusable="false"
         android:gravity="center_vertical"
         android:src="@drawable/up" />
 
@@ -33,9 +35,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:focusable="false"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/down"
+        android:focusable="false"
         android:gravity="center_vertical"
         android:src="@drawable/down" />
+
 </LinearLayout>

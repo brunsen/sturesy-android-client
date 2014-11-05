@@ -28,7 +28,6 @@ import java.util.List;
 
 import sturesy.android.controllers.ErrorDialog;
 import sturesy.android.controllers.FileImportDialog;
-import sturesy.android.controllers.settings.SettingsActivity;
 import sturesy.core.Log;
 import sturesy.core.backend.filter.file.NameXMLFileFilter;
 import sturesy.core.backend.filter.file.ZipFileFilter;
@@ -47,7 +46,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,7 +64,7 @@ import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.Simple
 import de.uhh.sturesy_android.R;
 
 public class QuestionGeneratorActivity extends Activity {
-	// TODO: Write comment for each method
+
 	private int _currentQuestion;
 	private String _currentFileName;
 	private QuestionListAdapter _questionAdapter;
@@ -76,6 +74,7 @@ public class QuestionGeneratorActivity extends Activity {
 	private EditText _fileNameEdit;
 	private DynamicListView _questionListView;
 	private Fragment _currentFragment;
+
 	// required for adding questions with dialog
 	private int _questionChoice;
 	private File _qtiFile;
@@ -91,6 +90,8 @@ public class QuestionGeneratorActivity extends Activity {
 				+ "/lectures/";
 		_currentFile = new File(_lecturesDirectory, "/temp.xml");
 		_currentQuestionset = new QuestionSet();
+
+		// Init and set adapter for listview
 		_questionAdapter = new QuestionListAdapter(this,
 				R.layout.question_list_item,
 				_currentQuestionset.getQuestionModels());
@@ -111,25 +112,37 @@ public class QuestionGeneratorActivity extends Activity {
 
 		setTouchListener(_questionListView, _questionAdapter);
 		_currentQuestion = -1;
+		_currentFragment = new NoQuestionFragment();
+		FragmentTransaction transaction = getFragmentManager()
+				.beginTransaction();
+		transaction.add(R.id._question_fragment, _currentFragment,
+				"QuestionFragment");
+		transaction.commit();
 	}
 
+	/**
+	 * Init common views to reduce expensive findviewbyid later on.
+	 */
 	private void initComponents() {
 		_fileNameEdit = (EditText) findViewById(R.id.catalogueTitle);
 		_questionListView = (DynamicListView) findViewById(R.id.questionList);
 	}
 
+	/**
+	 * Inflates the menu
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.qgen, menu);
 		return true;
 	}
 
+	/**
+	 * Defines which methods will called for each menu item.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_settings:
-			Intent intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
 		case R.id.save_question_set:
 			save();
 			return true;
@@ -176,6 +189,8 @@ public class QuestionGeneratorActivity extends Activity {
 						qm = null;
 						break;
 					}
+					// Set newly created question as current question and init
+					// UI to display question
 					setQuestionChoice(-1);
 					if (qm != null)
 					{
@@ -213,12 +228,7 @@ public class QuestionGeneratorActivity extends Activity {
 							if (_currentQuestion == position)
 							{
 								_currentQuestion = -1;
-								FragmentManager manager = getFragmentManager();
-								FragmentTransaction transaction = manager
-										.beginTransaction();
-								transaction.remove(_currentFragment);
-								transaction.commit();
-								_currentFragment = null;
+								replaceFragment(new NoQuestionFragment());
 							}
 							adapter.notifyDataSetChanged();
 						}
@@ -229,6 +239,9 @@ public class QuestionGeneratorActivity extends Activity {
 		listView.enableSimpleSwipeUndo();
 	}
 
+	/**
+	 * Method to import qti questions and add them to the current questionset.
+	 */
 	private void importQTI() {
 		String title = getString(R.string.qti_import);
 		final FileImportDialog dialog = new FileImportDialog(this,
@@ -246,12 +259,18 @@ public class QuestionGeneratorActivity extends Activity {
 						_currentQuestionset.addQuestionModel(questionModel);
 					}
 					_questionAdapter.notifyDataSetChanged();
+					// Check if qti import was 100% successful
+					checkQTIAfterImport(qtiService, questions);
 				}
 			}
 		});
 		dialog.show();
 	}
 
+	/**
+	 * Opens a dialog to select previously saved questions. Loads them after
+	 * selection.
+	 */
 	private void loadQuestion() {
 		String title = getString(R.string.load_question_set);
 		final FileImportDialog dialog = new FileImportDialog(this,
@@ -342,17 +361,16 @@ public class QuestionGeneratorActivity extends Activity {
 			qm.getAnswers().add("Antwort A");
 			qm.getAnswers().add("Antwort B");
 		}
-		_currentFragment = null;
 		if (qm instanceof SingleChoiceQuestion)
 		{
 			SingleChoiceQuestion scq = (SingleChoiceQuestion) qm;
-			_currentFragment = new SingleQuestionFragment(scq,
-					getQuestionAdapter());
+			replaceFragment(new SingleQuestionFragment(scq,
+					getQuestionAdapter()));
 		} else if (qm instanceof MultipleChoiceQuestion)
 		{
 			MultipleChoiceQuestion mcq = (MultipleChoiceQuestion) qm;
-			_currentFragment = new MultipleQuestionFragment(mcq,
-					getQuestionAdapter());
+			replaceFragment(new MultipleQuestionFragment(mcq,
+					getQuestionAdapter()));
 		} else if (qm instanceof TextQuestion)
 		{
 			TextQuestion tq = (TextQuestion) qm;
@@ -360,23 +378,14 @@ public class QuestionGeneratorActivity extends Activity {
 			{
 				tq.setAnswer("Antwort A");
 			}
-			_currentFragment = new TextQuestionFragment(tq,
-					getQuestionAdapter());
+			replaceFragment(new TextQuestionFragment(tq, getQuestionAdapter()));
 		}
-		FragmentManager manager = getFragmentManager();
-		FragmentTransaction transaction = manager.beginTransaction();
-		if (manager.findFragmentByTag("QuestionFragment") == null)
-		{
-			transaction.add(R.id._question_fragment, _currentFragment,
-					"QuestionFragment");
-		} else
-		{
-			transaction.replace(R.id._question_fragment, _currentFragment,
-					"QuestionFragment");
-		}
-		transaction.commit();
+
 	}
 
+	/**
+	 * Saves the current question to a file.
+	 */
 	public void save() {
 
 		if (_currentFile != null
@@ -514,5 +523,41 @@ public class QuestionGeneratorActivity extends Activity {
 		{
 			_currentFile = f;
 		}
+	}
+
+	/**
+	 * Checks how many qti questions were imported of a given set. Shows dialog
+	 * if at least one question was not parsed.
+	 * 
+	 * @param qtiService
+	 * @param questions
+	 */
+	private void checkQTIAfterImport(QTIImportService qtiService,
+			QuestionSet questions) {
+		int questionSize = questions.getQuestionModels().size();
+		int qtiTotal = qtiService.getQTIQuestionSize();
+		if (questionSize < qtiTotal)
+		{
+			String message = String.format(
+					getString(R.string.error_parsing_qti), questionSize,
+					qtiTotal);
+			ErrorDialog alert = new ErrorDialog(this,
+					getString(R.string.error), message);
+			alert.show();
+		}
+	}
+
+	/**
+	 * Helper method to reduce code and handle fragment replace transactions.
+	 * 
+	 * @param fragment
+	 */
+	private void replaceFragment(Fragment fragment) {
+		_currentFragment = fragment;
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id._question_fragment, _currentFragment,
+				"QuestionFragment");
+		transaction.commit();
 	}
 }
