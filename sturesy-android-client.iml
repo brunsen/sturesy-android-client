@@ -14,6 +14,7 @@
         <option name="ASSEMBLE_TEST_TASK_NAME" value="assembleDebugTest" />
         <option name="SOURCE_GEN_TASK_NAME" value="generateDebugSources" />
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/res" />
       </configuration>
     </facet>
   </component>
@@ -74,14 +75,14 @@
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
-    <orderEntry type="library" exported="" name="listviewanimations_lib-core_3.1.0" level="project" />
-    <orderEntry type="library" exported="" name="listviewanimations_lib-manipulation_3.1.0" level="project" />
-    <orderEntry type="library" exported="" name="nineoldandroids-2.4.0" level="project" />
-    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
-    <orderEntry type="library" exported="" name="listviewanimations_lib-core-slh_3.1.0" level="project" />
-    <orderEntry type="library" exported="" name="xzing-core-2.2" level="project" />
+    <orderEntry type="library" exported="" name="lib-core-3.1.0" level="project" />
+    <orderEntry type="library" exported="" name="lib-core-slh-3.1.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-21.0.0" level="project" />
+    <orderEntry type="library" exported="" name="core-3.1.0" level="project" />
     <orderEntry type="library" exported="" name="achartengine-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.3.2" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-21.0.0" level="project" />
+    <orderEntry type="library" exported="" name="lib-manipulation-3.1.0" level="project" />
   </component>
 </module>
 
