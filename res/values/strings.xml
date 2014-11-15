@@ -16,7 +16,7 @@
     <!-- Voting -->
     <string name="answers">Antworten</string>
     <string name="votes">Stimmen</string>
-    <string name="lecture_panel_text">Vorlesungs-ID für Onlineabstimmungen: </string>
+    <string name="lecture_panel_text">Vorlesungs-ID für Onlineabstimmungen:</string>
     <string name="time">Zeit:</string>
     <string name="no_file_name">Es wurde kein Name angegeben. Speichervorgang abgebrochen.</string>
     <string name="votings">Abstimmungen</string>

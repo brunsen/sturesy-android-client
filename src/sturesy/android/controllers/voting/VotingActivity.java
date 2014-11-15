@@ -42,7 +42,9 @@ import sturesy.services.VotingTimeListener;
 import sturesy.services.deserialization.QuestionImportService;
 import sturesy.services.serialization.VoteExportService;
 import sturesy.util.QRCodeGenerator;
+import sturesy.util.Settings;
 import sturesy.util.SturesyManager;
+import sturesy.util.web.WebCommands;
 import sturesy.util.web.WebVotingHandler;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -76,7 +78,8 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	private QuestionSet _currentQuestionSet;
 	private int _currentQuestion;
 	private LectureID _lectureID;
-	private String _lecturefile;
+	private String _lectureFile;
+    private String _urlLabelText;
 	private File _currentFile;
 
 	private TechnicalVotingService _votingService;
@@ -84,8 +87,9 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	private VotingSet _votingSaver;
 	private EditText _timeField;
 	private Fragment _currentFragment;
-	private TextView _votingpanel;
+	private TextView _votingPanel;
 	private TextView _lectureIDPanel;
+    private TextView _urlLabelPanel;
 	private TextView _progressTextView;
 	private MenuItem _startButton;
 
@@ -94,7 +98,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_voting);
 		initComponents();
-		_lecturefile = "";
+		_lectureFile = "";
 		_currentQuestion = 0;
 		_votingService = new TechnicalVotingServiceImpl(this, this,
 				SturesyManager.getLoadedPollPlugins());
@@ -102,11 +106,18 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		if (lectureIDs.isEmpty())
 		{
 			_lectureID = null;
+            _urlLabelText = "";
+            String idName = WebVotingHandler.NOLECTUREID.getLectureID();
+            _lectureIDPanel.setText(getString(R.string.lecture_panel_text) + "  " +idName);
 		}
 
 		else
 		{
 			_lectureID = lectureIDs.iterator().next();
+            _lectureIDPanel.setText(getString(R.string.lecture_panel_text) + "  " +_lectureID.getLectureID());
+            _urlLabelText = SturesyManager.getSettings().getString(Settings.CLIENTADDRESS) + "?lecture="
+                    + WebCommands.encode(_lectureID.getLectureID());
+            _urlLabelPanel.setText(_urlLabelText);
 		}
 		_votingService.registerTimeListener(this);
 	}
@@ -115,7 +126,8 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		_timeField = (EditText) findViewById(R.id.time);
 		_isVotingRunning = false;
 		_lectureIDPanel = (TextView) findViewById(R.id.voting_lectureID);
-		_votingpanel = (TextView) findViewById(R.id.voting_votes);
+		_votingPanel = (TextView) findViewById(R.id.voting_votes);
+        _urlLabelPanel = (TextView) findViewById(R.id.voting_url_panel);
 		_progressTextView = (TextView) findViewById(R.id.questionNumber);
 	}
 
@@ -170,7 +182,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 			VoteExportService votingService = new VoteExportService();
 			try
 			{
-				votingService.createAndUpdateVoting(_votingSaver, _lecturefile);
+				votingService.createAndUpdateVoting(_votingSaver, _lectureFile);
 			} catch (IOException e)
 			{
 				Log.error(e.getMessage(), e.getCause());
@@ -211,7 +223,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	 * @param v
 	 */
 	public void previousVoting(View v) {
-		if (!_lecturefile.equals(""))
+		if (!_lectureFile.equals(""))
 		{
 			if (!_isVotingRunning && _currentQuestion > 0
 					&& _currentFragment instanceof VotingDataFragment)
@@ -228,7 +240,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	 * @param v
 	 */
 	public void nextVoting(View v) {
-		if (!_lecturefile.equals(""))
+		if (!_lectureFile.equals(""))
 		{
 			if (!_isVotingRunning
 					&& _currentQuestionSet.size() != _currentQuestion + 1
@@ -243,7 +255,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	 * Starts the voting.
 	 */
 	public void startStopVoting() {
-		if (!_lecturefile.equals(""))
+		if (!_lectureFile.equals(""))
 		{
 			if (_isVotingRunning)
 			{
@@ -259,13 +271,13 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	 * Resets the voting. Clears votes for the current question.
 	 */
 	public void resetVoting() {
-		if (!_lecturefile.equals("")
+		if (!_lectureFile.equals("")
 				&& _currentFragment instanceof VotingDataFragment)
 		{
 			_votingSaver.clearVotesFor(_currentQuestion);
 			String votes = getString(R.string.votes);
-			_votingpanel.setText(votes
-					+ _votingSaver.getVotesFor(_currentQuestion).size());
+			_votingPanel.setText(votes
+                    + _votingSaver.getVotesFor(_currentQuestion).size());
 			int duration = _currentQuestionSet.getIndex(_currentQuestion)
 					.getDuration();
 			_timeField.setText(""
@@ -298,7 +310,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 					if (_votingSaver.addVote(_currentQuestion, vote))
 					{
 						String votes = getString(R.string.votes);
-						_votingpanel.setText(_votingSaver.getVotesFor(_currentQuestion)
+						_votingPanel.setText(_votingSaver.getVotesFor(_currentQuestion)
                                 .size() + " " + votes);
 					}
 				}
@@ -356,16 +368,6 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		_currentQuestion = index;
 		setCurrentQuestionModel(_currentQuestionSet, _currentQuestion);
 
-		if (_lectureID != WebVotingHandler.NOLECTUREID && _lectureID != null)
-		{
-			_lectureIDPanel.setText( getString(R.string.lecture_panel_text) + _lectureID.getLectureID());
-		} else
-		{
-			String idName = WebVotingHandler.NOLECTUREID.getLectureID();
-			int id = getResources().getIdentifier(idName, "string",
-					getPackageName());
-			_lectureIDPanel.setText("LectureID: " + getString(id));
-		}
 		_progressTextView.setText((index + 1) + " / "
 				+ _currentQuestionSet.size());
 		int duration = _currentQuestionSet.getIndex(index).getDuration();
@@ -374,11 +376,11 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		String votes = getString(R.string.votes);
 		if (_votingSaver != null)
 		{
-            _votingpanel.setText(_votingSaver.getVotesFor(_currentQuestion)
+            _votingPanel.setText(_votingSaver.getVotesFor(_currentQuestion)
                     .size() + " " + votes);
 		} else
 		{
-            _votingpanel.setText("0 " + votes);
+            _votingPanel.setText("0 " + votes);
 		}
 		_votingService.prepareVoting(_lectureID, _currentQuestionSet, index);
 	}
@@ -484,7 +486,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	public void readFile(File f) {
 		QuestionImportService qp = new QuestionImportService();
 		boolean error = false;
-		_lecturefile = f.getAbsolutePath();
+		_lectureFile = f.getAbsolutePath();
 		try
 		{
 
