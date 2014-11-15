@@ -79,7 +79,7 @@ public class BarChartFactory {
 					tryColorMultipleChoice(qm, i, renderer);
 				}
 				else{
-					renderer.setColor(Color.parseColor("#FFCC11"));
+					renderer.setColor(Color.parseColor("#0099CC"));
 				}
 				addSeries(votesarr,max , dataSet, multiRenderer, i, text, renderer);
 			}
@@ -108,7 +108,7 @@ public class BarChartFactory {
 				}
 				if(!showCorrect)
 				{
-					renderer.setColor(Color.parseColor("#FFCC11"));
+					renderer.setColor(Color.parseColor("#0099CC"));
 				}
 				addSeries(votesarr, max, dataSet, multiRenderer, i, text, renderer);
 			}

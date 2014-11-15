@@ -257,9 +257,6 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 
 	/**
 	 * Resets the voting. Clears votes for the current question.
-	 * 
-	 * @param The
-	 *            view that was clicked (voting button)
 	 */
 	public void resetVoting() {
 		if (!_lecturefile.equals("")
@@ -301,9 +298,8 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 					if (_votingSaver.addVote(_currentQuestion, vote))
 					{
 						String votes = getString(R.string.votes);
-						_votingpanel.setText(votes
-								+ _votingSaver.getVotesFor(_currentQuestion)
-										.size());
+						_votingpanel.setText(_votingSaver.getVotesFor(_currentQuestion)
+                                .size() + " " + votes);
 					}
 				}
 			}
@@ -362,7 +358,7 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 
 		if (_lectureID != WebVotingHandler.NOLECTUREID && _lectureID != null)
 		{
-			_lectureIDPanel.setText("LectureID: " + _lectureID.getLectureID());
+			_lectureIDPanel.setText( getString(R.string.lecture_panel_text) + _lectureID.getLectureID());
 		} else
 		{
 			String idName = WebVotingHandler.NOLECTUREID.getLectureID();
@@ -378,11 +374,11 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		String votes = getString(R.string.votes);
 		if (_votingSaver != null)
 		{
-			_votingpanel.setText(votes + ""
-					+ _votingSaver.getVotesFor(_currentQuestion).size());
+            _votingpanel.setText(_votingSaver.getVotesFor(_currentQuestion)
+                    .size() + " " + votes);
 		} else
 		{
-			_votingpanel.setText(votes + "0");
+            _votingpanel.setText("0 " + votes);
 		}
 		_votingService.prepareVoting(_lectureID, _currentQuestionSet, index);
 	}
@@ -517,10 +513,10 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 	}
 
 	public void setCurrentQuestionSet(QuestionSet set) {
-		_currentQuestionSet = set;
+        _currentQuestionSet = set;
 	}
 
 	public void setCurrentFile(File f) {
-		_currentFile = f;
+        _currentFile = f;
 	}
 }
