@@ -88,7 +88,8 @@
     <string name="dialog_import_title">Auswahl</string>
     <string name="Abort">Abbrechen</string>
     <string name="OK">OK</string>
-    <string name="error.no.lecture.id">Keine Vorlesungs-ID</string>
+    <string name="error_no_lecture_id">Keine Vorlesungs-ID</string>
+    <string name="no_lecture_id_message">Es wurde keine gültige Vorlesungs_ID eingetragen. Eine Online-Abstimmung ist nur mit Hilfe einer gültigen Vorlesungs-ID und einem StuReSy Server möglich. Bitte tragen Sie die ID in den Einstellungen ein.</string>
     <string name="error_load_questionset">Mindestens ein Frageset konnte nicht geladen werden.</string>
 
     <!-- Settings activity -->

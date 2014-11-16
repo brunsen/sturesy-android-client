@@ -19,7 +19,9 @@ package sturesy.android.controllers.voting;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -102,18 +104,25 @@ public class VotingActivity extends Activity implements Injectable, TimeSource,
 		_currentQuestion = 0;
 		_votingService = new TechnicalVotingServiceImpl(this, this,
 				SturesyManager.getLoadedPollPlugins());
-		Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs(this);
-		if (lectureIDs.isEmpty())
+		List<LectureID> lectureIDs = new ArrayList<LectureID>(SturesyManager.getLectureIDs(this));
+		if (lectureIDs.isEmpty() || lectureIDs.get(0).getLectureID().equals(""))
 		{
 			_lectureID = null;
             _urlLabelText = "";
-            String idName = WebVotingHandler.NOLECTUREID.getLectureID();
-            _lectureIDPanel.setText(getString(R.string.lecture_panel_text) + "  " +idName);
+            _lectureIDPanel.setText(getString(R.string.lecture_panel_text));
+            ErrorDialog dialog = new ErrorDialog(this,getString(R.string.error_no_lecture_id), getString(R.string.no_lecture_id_message));
+            dialog.setOnDismissListener(new OnDismissListener() {
+                 @Override
+                 public void onDismiss(DialogInterface dialog) {
+                          finish();
+                 }
+            });
+            dialog.show();
 		}
 
 		else
 		{
-			_lectureID = lectureIDs.iterator().next();
+			_lectureID = lectureIDs.get(0);
             _lectureIDPanel.setText(getString(R.string.lecture_panel_text) + "  " +_lectureID.getLectureID());
             _urlLabelText = SturesyManager.getSettings().getString(Settings.CLIENTADDRESS) + "?lecture="
                     + WebCommands.encode(_lectureID.getLectureID());
