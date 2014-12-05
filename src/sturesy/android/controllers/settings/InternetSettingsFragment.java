@@ -185,12 +185,22 @@ public class InternetSettingsFragment extends Fragment {
 		}
 
 		// Save server address for client and host.
-		String serveraddress = _hostTextview.getText().toString();
-		String clientaddress = serveraddress.replace("relay.php", "index.php");
-		_settings.setProperty(Settings.SERVERADDRESS, serveraddress);
+		String url = _hostTextview.getText().toString();
+        if (!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://"))
+        {
+            url = "http://" + url;
+        }
+        if (!url.endsWith("/") && !url.endsWith(".php"))
+        {
+            url += "/relay.php";
+        }
+        if (url.endsWith("/"))
+        {
+            url += "relay.php";
+        }
+		String clientaddress = url.replace("relay.php", "index.php");
+		_settings.setProperty(Settings.SERVERADDRESS, url);
 		_settings.setProperty(Settings.CLIENTADDRESS, clientaddress);
-		_settings.setProperty(Settings.SERVERADDRESS, _hostTextview.getText()
-				.toString());
 		_settings.setProperty(Settings.POLL_FREQUENCY, _pollFrequency.getText()
 				.toString());
 		_settings.setProperty(Settings.WEB_PLUGIN_ENABLED, true);
@@ -211,24 +221,30 @@ public class InternetSettingsFragment extends Fragment {
 		String password = _passwordTextview.getText().toString();
 		if (id.length() != 0 && password.length() != 0)
 		{
-
-			String host = _settings.getString(Settings.SERVERADDRESS);
-			if (host == null || !host.matches("http://.*"))
-			{
-				String errorTitle = getString(R.string.error);
-				String errorMessage = getString(R.string.error_no_valid_host_provided);
-				ErrorDialog alert = new ErrorDialog(_activity, errorTitle,
-						errorMessage);
-				alert.show();
-				return;
-			}
-			Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs(_activity);
-			lectureIDs.clear();
-			lectureIDs.add(new LectureID(id, password, host));
-			SturesyManager.storeLectureIDs((List<LectureID>) lectureIDs, _activity);
-			Toast.makeText(_activity.getApplicationContext(),
-					getString(R.string.saving_lecture_id_success),
-					Toast.LENGTH_SHORT).show();
+            try {
+                String host = _settings.getString(Settings.SERVERADDRESS);
+                if (host == null || !host.matches("http://.*"))
+                {
+                    throw new Exception();
+                }
+                URL serverURL = new URL(host);
+                Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs(_activity);
+                lectureIDs.clear();
+                lectureIDs.add(new LectureID(id, password, serverURL.toString()));
+                SturesyManager.storeLectureIDs((List<LectureID>) lectureIDs, _activity);
+                _hostTextview.setText(host);
+                Toast.makeText(_activity.getApplicationContext(),
+                        getString(R.string.saving_lecture_id_success),
+                        Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e)
+            {
+                String errorTitle = getString(R.string.error);
+                String errorMessage = getString(R.string.error_no_valid_host_provided);
+                ErrorDialog alert = new ErrorDialog(_activity, errorTitle,
+                        errorMessage);
+                alert.show();
+            }
 
 		} else
 		{ // Password or ID empty
