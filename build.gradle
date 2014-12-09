@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -30,7 +30,7 @@ dependencies {
 android {
 
     compileSdkVersion 19
-    buildToolsVersion "20.0.0"
+    buildToolsVersion "21.1.1"
 
     sourceSets {
         main {
@@ -54,13 +54,6 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
-    }
-    buildTypes {
-        release {
-            runProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), \
-                          'proguard-rules.txt'
-        }
     }
 
 }

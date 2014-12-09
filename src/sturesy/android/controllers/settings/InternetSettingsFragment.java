@@ -72,9 +72,9 @@ public class InternetSettingsFragment extends Fragment {
 		View view = (LinearLayout) inflater.inflate(
 				R.layout.internet_settings_fragment, container, false);
 		_settings = SturesyManager.getSettings();
-		_activity = getActivity();
-		Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs(_activity);
-		if (lectureIDs == null)
+        _activity = getActivity();
+        Collection<LectureID> lectureIDs = SturesyManager.getLectureIDs(_activity);
+        if (lectureIDs == null)
 		{
 			lectureIDs = new ArrayList<LectureID>();
 		}
