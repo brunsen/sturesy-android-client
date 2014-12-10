@@ -198,9 +198,9 @@ public class InternetSettingsFragment extends Fragment {
         {
             url += "relay.php";
         }
-		String clientaddress = url.replace("relay.php", "index.php");
+		String clientAddres = url.replace("relay.php", "index.php");
 		_settings.setProperty(Settings.SERVERADDRESS, url);
-		_settings.setProperty(Settings.CLIENTADDRESS, clientaddress);
+		_settings.setProperty(Settings.CLIENTADDRESS, clientAddres);
 		_settings.setProperty(Settings.POLL_FREQUENCY, _pollFrequency.getText()
 				.toString());
 		_settings.setProperty(Settings.WEB_PLUGIN_ENABLED, true);
